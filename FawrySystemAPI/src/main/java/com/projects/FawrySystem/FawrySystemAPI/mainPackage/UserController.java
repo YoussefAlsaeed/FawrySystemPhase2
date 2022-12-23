@@ -14,6 +14,10 @@ import com.projects.FawrySystem.FawrySystemAPI.transaction.*;
 
 import java.util.Scanner;
 
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+@RestController
 public class UserController{
 	
     File file= new File("users.txt");
@@ -128,7 +132,7 @@ public void signUp(User user) throws IOException
 	}
     
 }
-    public boolean login(User user)
+    public boolean login(@RequestBody User user)
     { 
          boolean found=false;
          String tempUsername="";
@@ -145,6 +149,35 @@ public void signUp(User user) throws IOException
                  if(values[0].equals(user.getUsername())&&values[1].equals(user.getPassword()))
                  {
                      found=true;
+                 }
+
+           }
+             read.close();
+         }
+         catch(Exception e) {
+           
+             e.printStackTrace();
+         }
+        return found;
+    }
+	@PostMapping(value="/login")
+    public String loginAPI(@RequestBody User user)
+    { 
+         String found="Login Unsuccessful";
+         String tempUsername="";
+        
+         try {
+
+             Scanner read=new Scanner(file);//object to read the file
+            
+             System.out.println("here");
+             while (read.hasNext())
+             {
+                 tempUsername=read.nextLine();
+                  String [] values=tempUsername.split("-");
+                 if(values[0].equals(user.getUsername())&&values[1].equals(user.getPassword()))
+                 {
+                     found="Login Successful";
                  }
 
            }
