@@ -1,6 +1,7 @@
 package com.projects.FawrySystem.FawrySystemAPI.APIControllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -67,14 +68,17 @@ public class ApiCTRL {
 	public ArrayList<String> search(@PathVariable ("service") String item)
 	{
 		
-		ArrayList<String> results=userController.searchforService(item);
+		 ArrayList<String> results;
 		 if(currentUser==null)
 			{
-			   results.add("An Error Occured Please, Login First");
-			   return results;
+			 	results=new ArrayList<String>();
+			 	results.add("An Error Occured Please, Login First");
+			 	return results;
 			}
+		 results=userController.searchforService(item);
 		if(results.size()>0)
 		{
+			
 			return results;
 		}
 		else results.add("Nothing matches your query :'( "); 
@@ -121,7 +125,7 @@ public class ApiCTRL {
 			
 	}
 	
-	@GetMapping(value = "/viewTransations")
+	@GetMapping(value = "/viewTransactions")
 	public ArrayList<String> viewTransactions()
 	{
 		ArrayList<String> responses = new ArrayList<String>();
@@ -133,11 +137,12 @@ public class ApiCTRL {
 		}
 		else
 		{
-			ArrayList<ITransaction> transactions =  (ArrayList<ITransaction>) userController.viewUserTransactionHistory(currentUser).get(1);
+			ArrayList<ITransaction> transactions = userController.getUserTransactions(currentUser);
 
 			if(transactions.size()==0)
 			{
 				responses.add("No Transactions Yet !");
+				System.out.println("here");
 			}
 			else
 			{
@@ -156,12 +161,28 @@ public class ApiCTRL {
         {
             return "An Error Occured Please Login First";
         }
-        if((boolean)userController.viewUserTransactionHistory(currentUser).get(0))
+        if((boolean)userController.viewUserTransactionHistory(currentUser))
         {
-        adminController.addToRefundRequests(currentUser, TransactionID);
-        return "Your request will be accepted/rejected by the admin";
+	        adminController.addToRefundRequests(currentUser, TransactionID);
+	        return "Your request will be accepted/rejected by the admin";
         }
         return"No Transaction with this  ID" ;
 
     }
+	 @PostMapping(value="/signup")
+	 public String signup(@RequestBody User user)
+	 {
+		 try {
+			if(userController.signUp(user))
+			 {
+				 users.add(user);
+				 return "Welcome, "+user.getUsername()+" You are now part of our system\n You are now logged in as "+user.getUsername();
+			 }
+			 else return "Username already exists, please try something else";
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	 }
 }
