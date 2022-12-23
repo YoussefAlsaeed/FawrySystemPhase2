@@ -88,7 +88,7 @@ public class UserController{
 	        
 	    }
 
-public void signUp(User user) throws IOException 
+public boolean signUp(User user) throws IOException 
 {
 	
 	FileWriter fr = null;
@@ -122,6 +122,7 @@ public void signUp(User user) throws IOException
 		{
 			pr.println(user.getUsername()+"-"+user.getPassword()+"-"+user.getEmail());		
 			System.out.println("Welcome, "+user.getUsername()+" You are now part of our system ;-) ");
+			return true;
 		}
 		
 	} catch (IOException e) {
@@ -136,6 +137,7 @@ public void signUp(User user) throws IOException
 			e.printStackTrace();
 		}
 	}
+	return false;
     
 }
     public boolean login(@RequestBody User user)
@@ -195,12 +197,15 @@ public void signUp(User user) throws IOException
     }
     
     
-   public List<Object> viewUserTransactionHistory(User user)
-   {   
-	   ArrayList<ITransaction> transactions = user.getTransactionList();
-	   return Arrays.asList(user.printTransactions(),transactions);
-   }
-
+    public boolean  viewUserTransactionHistory(User user)
+    {
+ 	   
+ 	   return user.printTransactions();
+    }
+    public ArrayList<ITransaction> getUserTransactions(User user)
+    {
+    	return user.getTransactionList();
+    }
    
 	public void viewBalance(User user) {
 		System.out.println("CreditCard = "+user.getCreditCard());
