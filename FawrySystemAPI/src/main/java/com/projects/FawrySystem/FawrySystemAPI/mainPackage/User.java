@@ -2,9 +2,11 @@ package com.projects.FawrySystem.FawrySystemAPI.mainPackage;
 
 import java.util.ArrayList;
 
+import org.springframework.stereotype.Service;
+
 import com.projects.FawrySystem.FawrySystemAPI.serviceProviders.IService;
 import com.projects.FawrySystem.FawrySystemAPI.transaction.*;
-
+@Service
 public class User 
 {
 			
