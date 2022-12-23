@@ -1,4 +1,3 @@
-
 package com.projects.FawrySystem.FawrySystemAPI.mainPackage;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,12 +13,12 @@ import com.projects.FawrySystem.FawrySystemAPI.transaction.*;
 
 import java.util.Scanner;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-@RestController
+@Service
 public class UserController{
-	
     File file= new File("users.txt");
     ArrayList <IService> servicesList= new ArrayList<IService>();
     HashMap<String,Double> discountList = new HashMap<String,Double>();
@@ -39,11 +38,12 @@ public class UserController{
     	
     }
     
-	public void addToWallet(double amount,User user,AdminController a)
+	public boolean addToWallet(double amount,User user,AdminController a)
 	{
 		if(amount>user.getCreditCard())
 		{
 			System.out.println("Not enough money in your creditcard");
+			return false;
 		}
 		else {
 			user.setWallet(user.getWallet()+amount);
@@ -52,35 +52,39 @@ public class UserController{
 			System.out.println(t);
 			user.addTransaction(t);
 			a.addToTransactions(t,user);
+			return true;
 		}
 			
 		
 		
 	}
     
-    public void searchforService(String service)
-    {
-    	ArrayList<String> results = new ArrayList<String>();
-    	
-    	service = service.trim().toLowerCase();
-    	
-    	int count = 0;
-    	 	
-    	for(int i = 0 ; i< servicesList.size() ; i++)
-    	{
-    		if(servicesList.get(i).getClass().getSimpleName().toLowerCase().contains(service))
-    		{
-    			System.out.println((count+1) + " . "+ servicesList.get(i).getClass().getSimpleName()); //THIS IS PRINTING NOT INCREMENTING
-    			count++;
-    		}
-    	}
-    	
-    	if(count == 0)
-    	{
-    		System.out.println("Nothing matches your query	:'( ");
-    	}
-    	
-    }
+	 public ArrayList<String> searchforService(String service)
+	    {
+	        
+	        service = service.trim().toLowerCase();
+	        ArrayList<String> resultList = new ArrayList<String>();
+	        
+	        int count = 0;
+	             
+	        for(int i = 0 ; i< servicesList.size() ; i++)
+	        {
+	            if(servicesList.get(i).getClass().getSimpleName().toLowerCase().contains(service))
+	            {
+	                count++;
+	                
+	                resultList.add((count) + " . "+ servicesList.get(i).getClass().getSimpleName());
+	            }
+	        }
+	        
+	        if(count == 0)
+	        {
+	            resultList.add("Nothing matches your query :'( ");
+	        }
+	        
+	        return resultList;
+	        
+	    }
 
 public void signUp(User user) throws IOException 
 {
@@ -160,7 +164,7 @@ public void signUp(User user) throws IOException
          }
         return found;
     }
-	@PostMapping(value="/login")
+    @PostMapping(value="/login")
     public String loginAPI(@RequestBody User user)
     { 
          String found="Login Unsuccessful";
@@ -169,8 +173,6 @@ public void signUp(User user) throws IOException
          try {
 
              Scanner read=new Scanner(file);//object to read the file
-            
-             System.out.println("here");
              while (read.hasNext())
              {
                  tempUsername=read.nextLine();
