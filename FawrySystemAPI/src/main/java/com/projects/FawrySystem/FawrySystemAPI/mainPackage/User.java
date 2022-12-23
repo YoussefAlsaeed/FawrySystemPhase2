@@ -54,24 +54,24 @@ public class User
 		
 		public boolean printTransactions()
 		{
+			
+			
 			if(transactionList.size()==0)
 			{
 				System.out.println("No Transaction Yet");
 				return false;
-				
 			}
 			else
 			{
 				for(int i = 0;i<transactionList.size();i++)
 				{
-//					if(!(transactionList.get(i) instanceof RefundTransaction))
-					 System.out.println(transactionList.get(i));
-					 System.out.println("-----------------------------");
+					System.out.println(transactionList.get(i));
 				}
 				
 			}
 			return true;
 		}
+		
 		public void addTransaction(ITransaction t)
 		{
 			transactionList.add(t);

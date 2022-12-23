@@ -257,7 +257,7 @@ public class FawrySystemApiApplication {
                         	
                         	// Checks first if the user has any transactions then views the user transactions.
                         	
-                        	if(userController.viewUserTransactionHistory(loginUser))
+                        	if((boolean) userController.viewUserTransactionHistory(loginUser).get(0))
                         	{
                         		System.out.println("Enter the Transaction ID");
                         		TransactionID=scan.next();   //Choosing which transaction will be refunded.
