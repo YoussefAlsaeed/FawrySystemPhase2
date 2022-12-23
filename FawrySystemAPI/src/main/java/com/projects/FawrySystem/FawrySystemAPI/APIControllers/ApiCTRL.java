@@ -149,4 +149,19 @@ public class ApiCTRL {
 		}
 		return responses;
 	}
+	@GetMapping(value="/refundRequest/{TransactionID}")
+    public String refundRequest(@PathVariable ("TransactionID") String TransactionID )
+    {
+        if(currentUser==null)
+        {
+            return "An Error Occured Please Login First";
+        }
+        if((boolean)userController.viewUserTransactionHistory(currentUser).get(0))
+        {
+        adminController.addToRefundRequests(currentUser, TransactionID);
+        return "Your request will be accepted/rejected by the admin";
+        }
+        return"No Transaction with this  ID" ;
+
+    }
 }
