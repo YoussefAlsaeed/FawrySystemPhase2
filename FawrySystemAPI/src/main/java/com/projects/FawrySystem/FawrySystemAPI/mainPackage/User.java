@@ -14,7 +14,17 @@ public class User
 		private ArrayList <ITransaction> transactionList= new ArrayList<ITransaction>();
 		private double CreditCard=10000; 
 		private double wallet;
-		
+	
+		public User()
+		{
+			
+		}
+		public User(String username, String password) {
+			super();
+			this.username = username;
+			this.password = password;
+		}
+
 		public ArrayList<ITransaction> getTransactionList() {
 			return transactionList;
 		}
