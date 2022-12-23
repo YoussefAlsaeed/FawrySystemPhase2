@@ -3,6 +3,7 @@ package com.projects.FawrySystem.FawrySystemAPI.APIControllers;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -185,4 +186,34 @@ public class ApiCTRL {
 		}
 		return null;
 	 }
+	 
+	 @GetMapping(value="/viewMyBalance")
+	 public String viewMyBalance() 
+	 {
+		// currentUser=user;
+		if(currentUser==null)
+			{
+			   return "An Error Occured Please Login First";
+			}
+		 else
+			 return userController.viewBalance(currentUser);
+		 
+	 }
+	 @GetMapping(value="/viewDiscounts")
+	 public HashMap<String,String> viewDiscounts() 
+	 {
+		 HashMap<String,String> discounts =new HashMap<String,String>();
+		 
+		if(currentUser==null)
+			{
+			  discounts.put("An Error Occured","Please Login First");
+			  return discounts;
+			   
+			}
+		 else
+			 return userController.viewDiscounts();
+		 
+	 }
+	 
+
 }

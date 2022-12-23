@@ -207,11 +207,7 @@ public boolean signUp(User user) throws IOException
     	return user.getTransactionList();
     }
    
-	public void viewBalance(User user) {
-		System.out.println("CreditCard = "+user.getCreditCard());
-		System.out.println("Wallet Balance = "+user.getWallet());
-		
-	}
+	
 	
 	public void addtoDiscountList(String service, double discount)
 	{
@@ -222,12 +218,37 @@ public boolean signUp(User user) throws IOException
 	{
 		discountList.put(service,discount);
 	}
-	public void viewDiscounts()
+	
+	
+	public String viewBalance(User user)
 	{
-		for(Entry<String, Double> map: discountList.entrySet()){  
-			System.out.println(map.getKey()+ " : "+map.getValue() + "%");  
-			}
+		String creditCard=user.getCreditCard()+"";
+		String wallet=user.getWallet()+"";
+		return "CreditCard = "+creditCard+"\n"+"Wallet Balance = "+wallet;
+		
+		
 	}
+	
+    public  HashMap<String,String> viewDiscounts()
+	{
+		
+		 HashMap<String,String> discounts = new HashMap<String,String>();
+			for(Entry<String, Double> map: discountList.entrySet())
+			{  
+				String value=map.getValue()+"";
+				discounts.put(map.getKey(),value);  
+			}
+	
+			return discounts;
+			
+	}
+
+
+
+
+
+	
+
 
 }
 
