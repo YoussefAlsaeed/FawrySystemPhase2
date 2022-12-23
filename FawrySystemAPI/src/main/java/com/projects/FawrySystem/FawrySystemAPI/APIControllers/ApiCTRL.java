@@ -25,9 +25,10 @@ import com.projects.FawrySystem.FawrySystemAPI.mainPackage.User;
 import com.projects.FawrySystem.FawrySystemAPI.mainPackage.UserController;
 import com.projects.FawrySystem.FawrySystemAPI.serviceProviders.IService;
 import com.projects.FawrySystem.FawrySystemAPI.transaction.AddToWalletTransaction;
+import com.projects.FawrySystem.FawrySystemAPI.transaction.ITransaction;
 @RestController
 public class ApiCTRL {
-	 User currentUser;	 
+	 User currentUser ;
 	 ArrayList <IService> services = new ArrayList<>();
      ArrayList <User> users=new ArrayList<>();
      UserController userController;  
@@ -69,7 +70,7 @@ public class ApiCTRL {
 		ArrayList<String> results=userController.searchforService(item);
 		 if(currentUser==null)
 			{
-			   results.add("An Error Occured Please Login First");
+			   results.add("An Error Occured Please, Login First");
 			   return results;
 			}
 		if(results.size()>0)
@@ -90,7 +91,7 @@ public class ApiCTRL {
             {
                 if(users.get(i).getUsername().equals(user.getUsername()))
                 {
-                	 currentUser=users.get(i);
+                	currentUser=users.get(i);
                 	found=true;
                     
                 }
@@ -110,14 +111,42 @@ public class ApiCTRL {
 	{
 		if(currentUser==null)
 		{
-			return "An Error Occured Please Login First";
+			return "An Error Occured, Please Login First";
 		}
 		 if(userController.addToWallet(amount, currentUser, adminController)) // Adding money from credit card to current user's wallet and saving the transaction.
 		 {
 			 return "Amount added to wallet = "+currentUser.getWallet()+"\n Creditcard balance =  "+currentUser.getCreditCard();
 		 }
 		 else return"Transaction faild ,Not enough balance in your creditcard\n Creditcard balance = " +currentUser.getCreditCard();
-		
-		
+			
+	}
+	
+	@GetMapping(value = "/viewTransations")
+	public ArrayList<String> viewTransactions()
+	{
+		ArrayList<String> responses = new ArrayList<String>();
+
+		if(currentUser==null)
+		{
+			responses.add("An Error Occured, Please Login First");
+			return responses;
+		}
+		else
+		{
+			ArrayList<ITransaction> transactions =  (ArrayList<ITransaction>) userController.viewUserTransactionHistory(currentUser).get(1);
+
+			if(transactions.size()==0)
+			{
+				responses.add("No Transactions Yet !");
+			}
+			else
+			{
+				for(int i = 0;i<transactions.size();i++)
+				{
+					responses.add(transactions.get(i).toString());
+				}
+			}
+		}
+		return responses;
 	}
 }

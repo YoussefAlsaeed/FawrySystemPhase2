@@ -5,7 +5,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import com.projects.FawrySystem.FawrySystemAPI.serviceProviders.*;
@@ -193,10 +195,10 @@ public void signUp(User user) throws IOException
     }
     
     
-   public boolean  viewUserTransactionHistory(User user)
-   {
-	   
-	   return user.printTransactions();
+   public List<Object> viewUserTransactionHistory(User user)
+   {   
+	   ArrayList<ITransaction> transactions = user.getTransactionList();
+	   return Arrays.asList(user.printTransactions(),transactions);
    }
    
    
