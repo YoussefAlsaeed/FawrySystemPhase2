@@ -200,7 +200,7 @@ public void signUp(User user) throws IOException
 	   ArrayList<ITransaction> transactions = user.getTransactionList();
 	   return Arrays.asList(user.printTransactions(),transactions);
    }
-   
+
    
 	public void viewBalance(User user) {
 		System.out.println("CreditCard = "+user.getCreditCard());
