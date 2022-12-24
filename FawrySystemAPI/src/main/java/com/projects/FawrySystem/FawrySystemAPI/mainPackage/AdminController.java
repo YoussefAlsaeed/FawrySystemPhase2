@@ -17,13 +17,18 @@ import com.projects.FawrySystem.FawrySystemAPI.transaction.*;
 public class AdminController {
 	
 	Admin admin=new Admin();
-
+	private static AdminController instance;
     IRefundRequest refundRequestStrategy;
     
-    public AdminController()
+    public static  AdminController getInstance()
     {
-    	
+    	if(instance == null)
+    	{
+    		instance = new AdminController();
+    	}
+    	return instance;
     }
+    
     
     public void addPaymentMethodToProvider(ProviderFactory provider ,String s)
     {
@@ -57,7 +62,10 @@ public class AdminController {
 		return found;
 		
 	}
-	
+	public HashMap<String,User> getRefundRequests()
+	{
+		return admin.getRefundRequests();
+	}
 	
 	public boolean listallTransactions()
 	{

@@ -15,13 +15,13 @@ public class AddToWalletTransaction implements ITransaction
 		TransactionId="0"+Integer.toString(counter);
 		this.amount=amount;
 	}
-		
+	
 	
 
 	@Override
 	public String toString()
 	{
-		return "\n<Add to wallet transaction>\n<Transaction ID is "+ TransactionId +">\n" +"< Amount added to wallet is "+ amount +">\n";		
+		return "<Add to wallet transaction>,<Transaction ID is "+ TransactionId +">," +"< Amount added to wallet is "+ amount +">";		
 	}
 
 
