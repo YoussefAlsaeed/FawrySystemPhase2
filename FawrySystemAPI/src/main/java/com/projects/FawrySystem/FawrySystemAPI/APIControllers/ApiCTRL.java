@@ -250,6 +250,33 @@ public class ApiCTRL {
 	    return "You are logged out ! ";
 		 
 	 }
+	 @GetMapping(value = "/listAllTransaction")
+		public ArrayList<String> listAllTransactions()
+		{
+			ArrayList<String> newresponses = new ArrayList<String>();
+
+				ArrayList<ITransaction> transactions = adminController.getaLLTransactions();
+
+				if(transactions.size()==0)
+				{
+					newresponses.add("No Transactions Yet !");
+					System.out.println("here");
+				}
+				else
+				{
+					for(int i = 0;i<transactions.size();i++)
+					{
+						newresponses.add(transactions.get(i).toString());
+					}
+				}
+
+			return newresponses;
+		}
+	 
+
+
+
+
 	 
 	 
 }
