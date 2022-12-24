@@ -19,7 +19,7 @@ import com.projects.FawrySystem.FawrySystemAPI.transaction.ITransaction;
 
 @SpringBootApplication
 public class FawrySystemApiApplication {
-
+	public static ArrayList<User>users= new ArrayList<User>();
 	public static void main(String[] args) {
 		SpringApplication.run(FawrySystemApiApplication.class, args);
 		String choice = "";
@@ -29,10 +29,10 @@ public class FawrySystemApiApplication {
         String email;
         String TransactionID;
         ArrayList <IService> services = new ArrayList<>();
-        ArrayList <User> users=new ArrayList<>();
+       
         int counter=0;
         
-        //Factories
+        //Factories 
         
         WeFactory we=new WeFactory();
         VodafoneFactory vodafone=new VodafoneFactory();
@@ -65,14 +65,11 @@ public class FawrySystemApiApplication {
         services.add(school.createServiceProvider("donation"));
         services.add(mr.createServiceProvider("landline"));
         services.add(qr.createServiceProvider("landline"));
-        
-
        
         	
     	
-        UserController userController = new UserController(services);
-      
-        AdminController adminController=new AdminController();
+        UserController userController = UserController.getInstance(services);
+        AdminController adminController=AdminController.getInstance();
         User user;
 
         IRefundRequest r;

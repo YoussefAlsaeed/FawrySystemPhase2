@@ -21,7 +21,7 @@ public class AddToWalletTransaction implements ITransaction
 	@Override
 	public String toString()
 	{
-		return "\n   <Add to wallet transaction>\n<Transaction ID is "+ TransactionId +">    \n" +"< Amount added to wallet is "+ amount +">    \n";		
+		return "<Add to wallet transaction>,<Transaction ID is "+ TransactionId +">," +"< Amount added to wallet is "+ amount +">";	
 	}
 
 

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.projects.FawrySystem.FawrySystemAPI.FawrySystemApiApplication;
 import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.CancerHospitalFactory;
 import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.EtisalatFactory;
 import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.MonthlyReceiptFactory;
@@ -32,9 +33,9 @@ import com.projects.FawrySystem.FawrySystemAPI.transaction.ITransaction;
 public class ApiCTRL {
 	 User currentUser ;
 	 ArrayList <IService> services = new ArrayList<>();
-     ArrayList <User> users=new ArrayList<>();
+	 ArrayList <User> users=FawrySystemApiApplication.users;
      UserController userController;  
-     AdminController adminController=new AdminController();
+     AdminController adminController=AdminController.getInstance();
      WeFactory we=new WeFactory();
      VodafoneFactory vodafone=new VodafoneFactory();
      OrangeFactory orange=new OrangeFactory();
@@ -62,9 +63,9 @@ public class ApiCTRL {
         services.add(school.createServiceProvider("donation"));
         services.add(mr.createServiceProvider("landline"));
         services.add(qr.createServiceProvider("landline"));
-        userController = new UserController(services);
-	        
+        userController =UserController.getInstance(services);
 
+	        
 	}
 	 @GetMapping(value="/searchforService/{service}")
 	public ArrayList<String> search(@PathVariable ("service") String item)
