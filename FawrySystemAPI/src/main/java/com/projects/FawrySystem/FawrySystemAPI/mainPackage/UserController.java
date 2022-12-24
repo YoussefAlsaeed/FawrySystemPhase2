@@ -24,13 +24,21 @@ public class UserController{
     File file= new File("users.txt");
     ArrayList <IService> servicesList= new ArrayList<IService>();
     HashMap<String,Double> discountList = new HashMap<String,Double>();
-
+    private static UserController instance;
     
     public UserController (ArrayList <IService> servicesList) {
     	
         this.servicesList=servicesList;
         discountList.put("Overall Discount",10.0);
         discountList.put("Mobile Recharge Discount", 10.0);
+    }
+    public static UserController getInstance(ArrayList <IService> servicesList)
+    {
+    	if(instance == null)
+    	{
+			instance = new UserController(servicesList);
+    	}
+    	return instance;
     }
     
     public void setUserInfo(User user,String username,String password,String email)
