@@ -32,6 +32,7 @@ public class UserController{
         discountList.put("Overall Discount",10.0);
         discountList.put("Mobile Recharge Discount", 10.0);
     }
+    
     public void setUserInfo(User user,String username,String password,String email)
     {
     	user.setUsername(username);
@@ -56,9 +57,7 @@ public class UserController{
 			a.addToTransactions(t,user);
 			return true;
 		}
-			
-		
-		
+					
 	}
     
 	 public ArrayList<String> searchforService(String service)
@@ -88,58 +87,59 @@ public class UserController{
 	        
 	    }
 
-public boolean signUp(User user) throws IOException 
-{
-	
-	FileWriter fr = null;
-	BufferedWriter br = null;
-	PrintWriter pr = null;
-	Scanner read=new Scanner(file);
-	String tempUsername="";
-	try {
-		boolean check=true;
-		// to append to file, you need to initialize FileWriter using below constructor
-		fr = new FileWriter(file, true);
-		br = new BufferedWriter(fr);
+	public boolean signUp(User user) throws IOException 
+	{
 		
-		pr = new PrintWriter(br);
-		while(read.hasNext())
-		{
-			 tempUsername=read.nextLine();
-             String [] values=tempUsername.split("-");
-             if(values[0].equals(user.getUsername()))
-             {
-            	 System.out.println("USER ALREADY EXISTS! ");
- 				 pr.close();
-				 br.close();
-				 fr.close();
-				 check = false;
-				 
-             }
-             
-		}
-		if(check)
-		{
-			pr.println(user.getUsername()+"-"+user.getPassword()+"-"+user.getEmail());		
-			System.out.println("Welcome, "+user.getUsername()+" You are now part of our system ;-) ");
-			return true;
-		}
-		
-	} catch (IOException e) {
-		e.printStackTrace();
-		
-	} finally {
+		FileWriter fr = null;
+		BufferedWriter br = null;
+		PrintWriter pr = null;
+		Scanner read=new Scanner(file);
+		String tempUsername="";
 		try {
-			pr.close();
-			br.close();
-			fr.close();
+			boolean check=true;
+			// to append to file, you need to initialize FileWriter using below constructor
+			fr = new FileWriter(file, true);
+			br = new BufferedWriter(fr);
+			
+			pr = new PrintWriter(br);
+			while(read.hasNext())
+			{
+				 tempUsername=read.nextLine();
+	             String [] values=tempUsername.split("-");
+	             if(values[0].equals(user.getUsername()))
+	             {
+	            	 System.out.println("USER ALREADY EXISTS! ");
+	 				 pr.close();
+					 br.close();
+					 fr.close();
+					 check = false;
+					 
+	             }
+	             
+			}
+			if(check)
+			{
+				pr.println(user.getUsername()+"-"+user.getPassword()+"-"+user.getEmail());		
+				System.out.println("Welcome, "+user.getUsername()+" You are now part of our system ;-) ");
+				return true;
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
+			
+		} finally {
+			try {
+				pr.close();
+				br.close();
+				fr.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+		return false;
+	    
 	}
-	return false;
-    
-}
+	
     public boolean login(@RequestBody User user)
     { 
          boolean found=false;
@@ -168,8 +168,8 @@ public boolean signUp(User user) throws IOException
          }
         return found;
     }
-    @PostMapping(value="/login")
-    public String loginAPI(@RequestBody User user)
+  
+    public String loginAPI(User user)
     { 
          String found="Login Unsuccessful";
          String tempUsername="";
@@ -197,18 +197,17 @@ public boolean signUp(User user) throws IOException
     }
     
     
-    public boolean  viewUserTransactionHistory(User user)
-    {
- 	   
+    public boolean viewUserTransactionHistory(User user)
+    { 	   
  	   return user.printTransactions();
     }
+    
     public ArrayList<ITransaction> getUserTransactions(User user)
     {
     	return user.getTransactionList();
     }
    
-	
-	
+
 	public void addtoDiscountList(String service, double discount)
 	{
 		discountList.put(service,discount);
@@ -219,14 +218,11 @@ public boolean signUp(User user) throws IOException
 		discountList.put(service,discount);
 	}
 	
-	
 	public String viewBalance(User user)
 	{
 		String creditCard=user.getCreditCard()+"";
 		String wallet=user.getWallet()+"";
-		return "CreditCard = "+creditCard+"\n"+"Wallet Balance = "+wallet;
-		
-		
+		return "CreditCard = "+creditCard+"\n"+"Wallet Balance = "+wallet;		
 	}
 	
     public  HashMap<String,String> viewDiscounts()
@@ -243,12 +239,4 @@ public boolean signUp(User user) throws IOException
 			
 	}
 
-
-
-
-
-	
-
-
 }
-

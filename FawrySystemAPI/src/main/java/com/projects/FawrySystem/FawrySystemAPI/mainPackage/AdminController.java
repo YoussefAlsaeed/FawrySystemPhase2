@@ -53,7 +53,6 @@ public class AdminController {
 		    	}
 		    }
 		}
-	//	System.out.println(refundRequests);
 		return found;
 		
 	}
@@ -65,14 +64,23 @@ public class AdminController {
 	}
 	
 
-	public void listuserTransactions(String user)
+	public ArrayList<String> listuserTransactions(String user)
 	{
+		ArrayList<String> response = new ArrayList<String>();
+	
 		for (int i = 0; i <admin.getUserList().size(); i++)
 		{
 			if(admin.getUserList().get(i).getUsername().equals(user))
-				System.out.println(admin.getUserList().get(i));
+			{
+				String msg = admin.getUserList().get(i).toString();
+				response.add(msg);
+				System.out.println(admin.getUserList().get(i).toString());
+			}
 		}
+		
+		return response;
 	}
+	
 	public void addDiscount(String c,double discount, UserController userController)
 	{
 		if(c.equals("1"))
@@ -123,7 +131,6 @@ public class AdminController {
 	{
 		if(c.equals("1"))
     	{
-    		//MobileRechargeDiscount d=new MobileRechargeDiscount(null);
     		MobileRechargeDiscount.setDiscountPercentage(0.0);
     		System.out.println(MobileRechargeDiscount.getDis()); 
     		userController.removeDiscountList("Mobile Recharge Discount",0.0);
@@ -131,7 +138,6 @@ public class AdminController {
     	}
     	else if(c.equals("2"))
     	{
-    		//MobileRechargeDiscount d=new MobileRechargeDiscount(null);
     		InternetDiscount.setDiscountPercentage(0.0);
     		System.out.println(InternetDiscount.getDis()); 
     		userController.removeDiscountList("Internet Discount",0.0);
@@ -139,7 +145,6 @@ public class AdminController {
     	}
     	else if(c.equals("3"))
     	{
-    		//MobileRechargeDiscount d=new MobileRechargeDiscount(null);
     		LandLineDiscount.setDiscountPercentage(0.0);
     		System.out.println(LandLineDiscount.getDis()); 
     		userController.removeDiscountList("LandLine Discount",0.0);
@@ -147,7 +152,6 @@ public class AdminController {
     	}
     	else if(c.equals("4"))
     	{
-    		//MobileRechargeDiscount d=new MobileRechargeDiscount(null);
     		DonationsDiscount.setDiscountPercentage(0.0);
     		System.out.println(DonationsDiscount.getDis()); 
     		userController.removeDiscountList("Donations Discount",0.0);
@@ -155,7 +159,6 @@ public class AdminController {
     	}
     	else if(c.equals("5"))
     	{
-    		//MobileRechargeDiscount d=new MobileRechargeDiscount(null);
     		OverallDiscount.setDiscountPercentage(0.0);
     		System.out.println(OverallDiscount.getDis()); 
     		userController.removeDiscountList("Overall Discount",0.0);
@@ -206,9 +209,11 @@ public class AdminController {
 		addToTransactions(transaction,user);
 		
 	}
+	
 	public void setRefundRequest(IRefundRequest request) {
 		this.refundRequestStrategy= request;
 	}
+	
 	public IRefundRequest  RefundRequest() {
 		return refundRequestStrategy;
 	}

@@ -122,7 +122,7 @@ public class ApiCTRL {
 		 {
 			 return "Amount added to wallet = "+currentUser.getWallet()+"\n Creditcard balance =  "+currentUser.getCreditCard();
 		 }
-		 else return"Transaction faild ,Not enough balance in your creditcard\n Creditcard balance = " +currentUser.getCreditCard();
+		 else return"Transaction failed ,Not enough balance in your creditcard\n Creditcard balance = " +currentUser.getCreditCard();
 			
 	}
 	
@@ -215,5 +215,11 @@ public class ApiCTRL {
 		 
 	 }
 	 
-
+	 @GetMapping(value="/listUserTransactions/{username}")
+	 public ArrayList<String> listUserTransactions(@PathVariable ("username") String username)
+	 {	 
+		 return adminController.listuserTransactions(username) ;
+	 }
+	 
+	 
 }

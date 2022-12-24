@@ -104,9 +104,8 @@ public class User
 
 		@Override
 		public String toString() {
-			return "username: " + username + ",have made transactions\n" +  transactionList.toString() ;
+			return "username: " + username + ",have made transactions  \n"
+		           +  transactionList.toString() ;
 		}
-		
-		
 
 }
