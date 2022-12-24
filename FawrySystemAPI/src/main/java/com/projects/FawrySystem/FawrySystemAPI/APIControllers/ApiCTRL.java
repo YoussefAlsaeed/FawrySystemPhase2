@@ -241,7 +241,25 @@ public class ApiCTRL {
 	 @GetMapping(value="/listUserTransactions/{username}")
 	 public ArrayList<String> listUserTransactions(@PathVariable ("username") String username)
 	 {	 
-		 return adminController.listuserTransactions(username) ;
+		 ArrayList<String> message = new ArrayList<String>();
+		 if(!signedIn)
+		 {
+			 message.add("An Error Occured Please Login First");
+			 return message;
+		 }
+		 else
+		{
+			 message=adminController.listuserTransactions(username);
+			 if(message.size()>0)
+				 return message;
+			else
+			{
+				message.add("no transactions yet");
+				return message;
+			}
+				
+		 }
+		 
 	 }
 	 @GetMapping(value="/logout")
 	 public String logOut(@RequestBody User user)
@@ -257,7 +275,12 @@ public class ApiCTRL {
 
 				ArrayList<ITransaction> transactions = adminController.getaLLTransactions();
 
-				if(transactions.size()==0)
+				if(!signedIn)
+				{
+					newresponses.add("An Error Occured Please Login First");
+					return newresponses;
+				}
+				else if(transactions.size()==0)
 				{
 					newresponses.add("No Transactions Yet !");
 					System.out.println("here");
