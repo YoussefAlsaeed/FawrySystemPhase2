@@ -81,50 +81,56 @@ public class AdminController {
 		return response;
 	}
 	
-	public void addDiscount(String c,double discount, UserController userController)
+	public String addDiscount(String c,double discount, UserController userController)
 	{
 		if(c.equals("1"))
     	{
     		//MobileRechargeDiscount d=new MobileRechargeDiscount(null);
     		MobileRechargeDiscount.setDiscountPercentage(discount/100);
-    		System.out.println("Discount now is:"+MobileRechargeDiscount.getDis()); 
+    		String Mrdiscount=MobileRechargeDiscount.getDis()+"";
     		userController.addtoDiscountList("Mobile Recharge Discount",MobileRechargeDiscount.getDis()*100);
-    		
+    		return"Discount now is:"+Mrdiscount; 
 
     	}
     	else if(c.equals("2"))
     	{
     		//MobileRechargeDiscount d=new MobileRechargeDiscount(null);
     		InternetDiscount.setDiscountPercentage(discount/100);
-    		System.out.println("Discount now is:"+InternetDiscount.getDis()); 
+    		String Idiscount=InternetDiscount.getDis()+""; 
     		userController.addtoDiscountList("Internet Discount",InternetDiscount.getDis()*100);
+    		return"Discount now is:"+Idiscount;
 
     	}
+    	
     	else if(c.equals("3"))
     	{
     		//MobileRechargeDiscount d=new MobileRechargeDiscount(null);
     		LandLineDiscount.setDiscountPercentage(discount/100);
-    		System.out.println("Discount now is:"+LandLineDiscount.getDis()); 
+    		String Ldiscount=LandLineDiscount.getDis()+""; 
+    		//System.out.println("Discount now is:"+Ldiscount); 
     		userController.addtoDiscountList("LandLine Discount",LandLineDiscount.getDis()*100);
+    		return"Discount now is:"+Ldiscount;
 
     	}
     	else if(c.equals("4"))
     	{
     		//MobileRechargeDiscount d=new MobileRechargeDiscount(null);
     		DonationsDiscount.setDiscountPercentage(discount/100);
-    		System.out.println("Discount now is:"+DonationsDiscount.getDis()); 
+    		String Ddiscount=DonationsDiscount.getDis()+""; 
     		userController.addtoDiscountList("Donations Discount",DonationsDiscount.getDis()*100);
+    		return "Discount now is:"+Ddiscount;
 
     	}
     	else if(c.equals("5"))
     	{
     		//MobileRechargeDiscount d=new MobileRechargeDiscount(null);
     		OverallDiscount.setDiscountPercentage(discount/100);
-    		System.out.println("Discount now is:"+OverallDiscount.getDis()); 
+    		String Odiscount=OverallDiscount.getDis()+""; 
     		userController.addtoDiscountList("Overall Discount",OverallDiscount.getDis()*100);
+    		return "Discount now is:"+Odiscount;
 
     	}
-    	else System.out.println("Invalid choice");
+    	else return"Invalid choice";
 	}
 	
 	public void removeDiscount(String c, UserController userController)
