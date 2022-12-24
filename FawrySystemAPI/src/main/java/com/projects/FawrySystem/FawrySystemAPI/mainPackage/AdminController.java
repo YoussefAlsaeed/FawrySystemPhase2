@@ -63,6 +63,10 @@ public class AdminController {
 		return admin.printTransactions();
 	}
 	
+	   public ArrayList<ITransaction> getaLLTransactions()
+	    {
+	    	return admin.getTransactionList();
+	    }
 
 	public ArrayList<String> listuserTransactions(String user)
 	{
