@@ -125,6 +125,21 @@ public class ApiCTRL {
 		 else return"Transaction failed ,Not enough balance in your creditcard\n Creditcard balance = " +currentUser.getCreditCard();
 			
 	}
+	@PutMapping(value="/addDiscount/{choice}/{discount}")
+	public  String addDiscount (@PathVariable ("choice") String choice,@PathVariable("discount") double discount)
+   {
+	
+		if(currentUser==null)
+		{
+			return "An Error Occured, Please Login First";
+		}
+		else
+	     return adminController.addDiscount(choice, discount, userController);
+		
+		
+   }
+	
+	
 	
 	@GetMapping(value = "/viewTransactions")
 	public ArrayList<String> viewTransactions()
