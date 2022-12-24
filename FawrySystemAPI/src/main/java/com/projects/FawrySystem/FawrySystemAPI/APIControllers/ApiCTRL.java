@@ -44,6 +44,7 @@ public class ApiCTRL {
      SchoolProviderFactory school=new SchoolProviderFactory();
      MonthlyReceiptFactory mr=new MonthlyReceiptFactory();
      QuarterReceiptFactory qr=new QuarterReceiptFactory();
+     boolean signedIn;
      
 	public ApiCTRL() {
 		super();
@@ -70,20 +71,23 @@ public class ApiCTRL {
 	{
 		
 		 ArrayList<String> results;
-		 if(currentUser==null)
+		 if(signedIn)
+		 {
+		   results=userController.searchforService(item);
+			if(results.size()>0)
 			{
-			 	results=new ArrayList<String>();
-			 	results.add("An Error Occured Please, Login First");
-			 	return results;
+				
+				return results;
 			}
-		 results=userController.searchforService(item);
-		if(results.size()>0)
-		{
-			
+			else results.add("Nothing matches your query :'( "); 
 			return results;
-		}
-		else results.add("Nothing matches your query :'( "); 
-		return results;
+		  }
+			else
+			 {
+				 results=new ArrayList<String>();
+				 results.add("An Error Occured Please, Login First");
+				 return results;
+			 }
 	}
 	@GetMapping(value="/login")
     public String loginAPI(@RequestBody User user)
@@ -106,35 +110,39 @@ public class ApiCTRL {
             	currentUser=user;
                 users.add(user); 
             }
-           
+            signedIn=true;
             return "Login Successful";
         }
 		else return "User Not Found,Please signup first";
     }
+	
 	@PutMapping(value="/addToWallet/{amount}")
 	public String addToWallet(@PathVariable ("amount") double amount )
 	{
-		if(currentUser==null)
-		{
-			return "An Error Occured, Please Login First";
-		}
+		if(signedIn){
+			
 		 if(userController.addToWallet(amount, currentUser, adminController)) // Adding money from credit card to current user's wallet and saving the transaction.
 		 {
 			 return "Amount added to wallet = "+currentUser.getWallet()+"\n Creditcard balance =  "+currentUser.getCreditCard();
 		 }
 		 else return"Transaction failed ,Not enough balance in your creditcard\n Creditcard balance = " +currentUser.getCreditCard();
+		 }
+		else
+			return "An Error Occured, Please Login First";
+			
 			
 	}
 	@PutMapping(value="/addDiscount/{choice}/{discount}")
 	public  String addDiscount (@PathVariable ("choice") String choice,@PathVariable("discount") double discount)
    {
 	
-		if(currentUser==null)
+		if(signedIn)
 		{
-			return "An Error Occured, Please Login First";
+			return adminController.addDiscount(choice, discount, userController);
+			
 		}
 		else
-	     return adminController.addDiscount(choice, discount, userController);
+			return "An Error Occured, Please Login First";
 		
 		
    }
@@ -145,11 +153,11 @@ public class ApiCTRL {
 	public ArrayList<String> viewTransactions()
 	{
 		ArrayList<String> responses = new ArrayList<String>();
-
-		if(currentUser==null)
+		if(!signedIn)
 		{
 			responses.add("An Error Occured, Please Login First");
 			return responses;
+			
 		}
 		else
 		{
@@ -173,7 +181,7 @@ public class ApiCTRL {
 	@GetMapping(value="/refundRequest/{TransactionID}")
     public String refundRequest(@PathVariable ("TransactionID") String TransactionID )
     {
-        if(currentUser==null)
+        if(!signedIn)
         {
             return "An Error Occured Please Login First";
         }
@@ -219,7 +227,7 @@ public class ApiCTRL {
 	 {
 		 HashMap<String,String> discounts =new HashMap<String,String>();
 		 
-		if(currentUser==null)
+		if(!signedIn)
 			{
 			  discounts.put("An Error Occured","Please Login First");
 			  return discounts;
@@ -234,6 +242,13 @@ public class ApiCTRL {
 	 public ArrayList<String> listUserTransactions(@PathVariable ("username") String username)
 	 {	 
 		 return adminController.listuserTransactions(username) ;
+	 }
+	 @GetMapping(value="/logout")
+	 public String logOut(@RequestBody User user)
+	 {
+	    signedIn=false;
+	    return "You are logged out ! ";
+		 
 	 }
 	 
 	 
