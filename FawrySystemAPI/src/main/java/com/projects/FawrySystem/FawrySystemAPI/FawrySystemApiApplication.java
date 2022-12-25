@@ -397,7 +397,7 @@ public class FawrySystemApiApplication {
     							
     							System.out.println("Enter the name of the TextField: ");
     							name=scan.next();
-    							provider.addTextField(name);
+    							serviceCTRL.addTextField(providerFactoryName, name);
     							break;						
 
     						}

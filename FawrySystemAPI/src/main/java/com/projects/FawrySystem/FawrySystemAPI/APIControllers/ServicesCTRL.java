@@ -195,6 +195,21 @@ public class ServicesCTRL {
         
         return providerFactory;
     }
+	
+	
+	public String addTextField(String providerName , String textfield)
+	{
+		chooseProviderFactory(providerName).addTextField(textfield);
+		return "Textfield < "+textfield+" > has been added to " + providerName +"'s form";
+	}
+	
+	public String addDropDownField(String providerName , String dropdownfield,ArrayList<Object> values)
+	{	
+		chooseProviderFactory(providerName).addDropDownFlield(dropdownfield, values.size(), values);
+		return "Dropdown field < "+dropdownfield+" > has been added to " + providerName +"'s form";
+	}
+	
+	
 	public ArrayList<IService> getServicesFactory() {
 		return servicesFactory;
 	}
