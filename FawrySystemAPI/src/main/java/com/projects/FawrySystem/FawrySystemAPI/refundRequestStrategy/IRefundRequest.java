@@ -4,5 +4,5 @@ import com.projects.FawrySystem.FawrySystemAPI.mainPackage.User;
 import com.projects.FawrySystem.FawrySystemAPI.transaction.ITransaction;
 
 public interface IRefundRequest {
-public void refund(ITransaction acceptedTransaction,User user);
+public String refund(ITransaction acceptedTransaction,User user);
 }

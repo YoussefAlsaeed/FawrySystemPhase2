@@ -48,6 +48,10 @@ public class Admin {
     {    
         refundRequests.put(transactionID,user);
     }
+    public void removeFromRefundRequests(String transactionID)
+    {
+    	refundRequests.remove(transactionID);
+    }
     public boolean printTransactions()
     {
         if(transactions.size()==0)
