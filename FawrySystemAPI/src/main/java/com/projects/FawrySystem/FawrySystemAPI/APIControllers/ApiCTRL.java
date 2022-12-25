@@ -23,10 +23,12 @@ import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.QuarterReceiptFac
 import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.SchoolProviderFactory;
 import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.VodafoneFactory;
 import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.WeFactory;
+import com.projects.FawrySystem.FawrySystemAPI.composite.Form;
 import com.projects.FawrySystem.FawrySystemAPI.mainPackage.AdminController;
 import com.projects.FawrySystem.FawrySystemAPI.mainPackage.User;
 import com.projects.FawrySystem.FawrySystemAPI.mainPackage.UserController;
 import com.projects.FawrySystem.FawrySystemAPI.serviceProviders.IService;
+import com.projects.FawrySystem.FawrySystemAPI.serviceProviders.IServiceProviders;
 import com.projects.FawrySystem.FawrySystemAPI.transaction.AddToWalletTransaction;
 import com.projects.FawrySystem.FawrySystemAPI.transaction.ITransaction;
 @RestController
@@ -45,25 +47,15 @@ public class ApiCTRL {
      SchoolProviderFactory school=new SchoolProviderFactory();
      MonthlyReceiptFactory mr=new MonthlyReceiptFactory();
      QuarterReceiptFactory qr=new QuarterReceiptFactory();
+     ServicesCTRL serviceCTRL;
      boolean signedIn;
      
 	public ApiCTRL() {
 		super();
 		new File("users.txt");
-		services.add(we.createServiceProvider("mobile"));
-        services.add(we.createServiceProvider("internet"));
-        services.add(vodafone.createServiceProvider("mobile"));
-        services.add(vodafone.createServiceProvider("internet"));
-        services.add(orange.createServiceProvider("mobile"));
-        services.add(orange.createServiceProvider("internet"));
-        services.add(etisalat.createServiceProvider("mobile"));
-        services.add(etisalat.createServiceProvider("internet"));
-        services.add(cancerhospital.createServiceProvider("donation"));
-        services.add(ngo.createServiceProvider("donation"));
-        services.add(school.createServiceProvider("donation"));
-        services.add(mr.createServiceProvider("landline"));
-        services.add(qr.createServiceProvider("landline"));
-        userController =UserController.getInstance(services);
+		
+        userController =UserController.getInstance();
+        serviceCTRL=ServicesCTRL.getInstance();
 
 	        
 	}
@@ -74,7 +66,7 @@ public class ApiCTRL {
 		 ArrayList<String> results;
 		 if(signedIn)
 		 {
-		   results=userController.searchforService(item);
+		   results=serviceCTRL.searchforService(item);
 			if(results.size()>0)
 			{
 				
@@ -308,6 +300,31 @@ public class ApiCTRL {
 
 			return newresponses;
 		}
+	 
+	 @GetMapping(value="/getForm/{service}/{serviceProvider}")
+	 public String getForm(@PathVariable ("service") String service,@PathVariable ("serviceProvider") String serviceProvider)
+	 {
+		 IService serviceProviderObj= serviceCTRL.createProvider(service,serviceProvider); //creates service provider using abstract factory
+		 String form= serviceCTRL.getForm(serviceProviderObj);//return the form as string
+		 return form;
+	 }
+	 
+	 @PostMapping (value="/pay/{service}/{serviceProvider}")
+	 public String pay(@RequestBody ArrayList<String> values,@PathVariable ("service") String service,@PathVariable ("serviceProvider") String serviceProvider)
+	 {
+		 if(!signedIn)
+	        {
+	            return "An Error Occured Please Login First";
+	        }
+		 IService serviceProviderObj= serviceCTRL.createProvider(service,serviceProvider); //creates service provider using abstract factory
+		 Form form=serviceProviderObj.getForm();
+		 form.setValues(values);
+		 ITransaction transaction=serviceProviderObj.pay(currentUser);
+		 adminController.addToTransactions(transaction, currentUser);
+		 String result=transaction.toString();
+		 return result;
+	 }
+	 
 	 
 
 

@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class Form implements UIElements {
 	String formName;
 	ArrayList<UIElements> elements = new ArrayList<UIElements>();
+	ArrayList<String> values;
 	
 	public Form(String formName)
 	{
@@ -30,6 +31,19 @@ public class Form implements UIElements {
 		}
 
 	}
+	public String toString()
+	{
+		String form= "\t\tThis is "+formName+" form";
+		int counter=1;
+		for(int i=0;i<elements.size();i++)
+		{
+			form+="\n"+counter+"- ";
+			form+=elements.get(i).toString();
+			counter++;
+		}
+		return form;
+	}
+	
 	
 	//add UIEelements to form
 	public void addElement(UIElements element)
@@ -38,23 +52,33 @@ public class Form implements UIElements {
 	}
 	
 	//method to allow user to enter values for the form
-	public ArrayList<String> getValues()
+	public ArrayList<String> getValuesFromConsle()
 	{
 		Scanner sc=new Scanner(System.in);
-		ArrayList<String> values=new ArrayList<String>();
+		ArrayList<String> input=new ArrayList<String>();
 		System.out.println("\nPlease Enter your answers by order");
 		int counter=1;
 		for(int i=0;i<elements.size();i++)
 		{
 			System.out.print(counter+": ");
-			values.add(sc.nextLine());
+			input.add(sc.nextLine());
 			counter++;
 			
 		}
 		
-		return values;
+		return input;
 		
 	}
+	public  ArrayList<String> getValues()
+	{
+		return values;
+	}
+	public void setValues(ArrayList<String> values)
+	{
+		this.values=values;
+	}
+	
+	
 	public void setName(String name)
 	{
 		this.formName=name;

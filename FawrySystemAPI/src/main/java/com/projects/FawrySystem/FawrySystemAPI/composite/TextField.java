@@ -14,5 +14,9 @@ public class TextField implements UIElements {
 		System.out.println("---------------------------------------");
 
 	}
+	public String toString()
+	{
+		return "This is a Text Field, please enter ("+textFieldName+")"+"\n---------------------------------------\n";
+	}
 
 }

@@ -23,7 +23,7 @@ public abstract class LandLine implements IService,IServiceProviders{
 	{
 		form.view();
 		ArrayList<String> values=new ArrayList<String>();
-		values=form.getValues();
+		values=form.getValuesFromConsle();
 		System.out.println(values);
 		c.setValues(values);
 		c.setService(this);
@@ -36,6 +36,10 @@ public abstract class LandLine implements IService,IServiceProviders{
 	public void setCost(double cost) {
 		
 		this.cost = cost;
+	}
+	public Form getForm()
+	{
+		return form;
 	}
 	@Override
 	public String toString()

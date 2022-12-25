@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import com.projects.FawrySystem.FawrySystemAPI.APIControllers.ServicesCTRL;
 import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.*;
 import com.projects.FawrySystem.FawrySystemAPI.composite.*;
 import com.projects.FawrySystem.FawrySystemAPI.discountsDecorator.*;
@@ -31,44 +32,40 @@ public class FawrySystemApiApplication {
         ArrayList <IService> services = new ArrayList<>();
        
         int counter=0;
-        
-        //Factories 
-        
-        WeFactory we=new WeFactory();
-        VodafoneFactory vodafone=new VodafoneFactory();
-        OrangeFactory orange=new OrangeFactory();
-        EtisalatFactory etisalat=new EtisalatFactory();
-        CancerHospitalFactory cancerhospital=new  CancerHospitalFactory(); 
-        NGOFactory ngo=new NGOFactory(); 
-        SchoolProviderFactory school=new SchoolProviderFactory();
-        MonthlyReceiptFactory mr=new MonthlyReceiptFactory();
-        QuarterReceiptFactory qr=new QuarterReceiptFactory();
-        
-        
-        
+        //factories
+        ServicesCTRL serviceCTRL=ServicesCTRL.getInstance();
+        WeFactory we=serviceCTRL.getWeFactory();
+        VodafoneFactory vodafone=serviceCTRL.getVodafoneFactory();
+        OrangeFactory orange=serviceCTRL.getOrangeFactory();
+        EtisalatFactory etisalat=serviceCTRL.getEtisalatFactory();   
+        CancerHospitalFactory cancerhospital=serviceCTRL.getCancerhospitalFactory();
+        NGOFactory ngo=serviceCTRL.getNgoFactory();
+		SchoolProviderFactory school=serviceCTRL.getSchoolFactory();
+	    MonthlyReceiptFactory mr=serviceCTRL.getMonthlyReceiptFactory();
+	    QuarterReceiptFactory qr=serviceCTRL.getQuarterReceiptFactory();
        
         
         //Creating services providers using Factories
         
         IService service;
         
-        services.add(we.createServiceProvider("mobile"));
-        services.add(we.createServiceProvider("internet"));
-        services.add(vodafone.createServiceProvider("mobile"));
-        services.add(vodafone.createServiceProvider("internet"));
-        services.add(orange.createServiceProvider("mobile"));
-        services.add(orange.createServiceProvider("internet"));
-        services.add(etisalat.createServiceProvider("mobile"));
-        services.add(etisalat.createServiceProvider("internet"));
-        services.add(cancerhospital.createServiceProvider("donation"));
-        services.add(ngo.createServiceProvider("donation"));
-        services.add(school.createServiceProvider("donation"));
-        services.add(mr.createServiceProvider("landline"));
-        services.add(qr.createServiceProvider("landline"));
+//        services.add(we.createServiceProvider("mobile"));
+//        services.add(we.createServiceProvider("internet"));
+//        services.add(vodafone.createServiceProvider("mobile"));
+//        services.add(vodafone.createServiceProvider("internet"));
+//        services.add(orange.createServiceProvider("mobile"));
+//        services.add(orange.createServiceProvider("internet"));
+//        services.add(etisalat.createServiceProvider("mobile"));
+//        services.add(etisalat.createServiceProvider("internet"));
+//        services.add(cancerhospital.createServiceProvider("donation"));
+//        services.add(ngo.createServiceProvider("donation"));
+//        services.add(school.createServiceProvider("donation"));
+//        services.add(mr.createServiceProvider("landline"));
+//        services.add(qr.createServiceProvider("landline"));
        
-        	
+        
     	
-        UserController userController = UserController.getInstance(services);
+        UserController userController = UserController.getInstance();
         AdminController adminController=AdminController.getInstance();
         User user;
 
@@ -148,16 +145,14 @@ public class FawrySystemApiApplication {
                         case"1":
                             System.out.println("Enter the service you want to search for "); 
                             String searchedForService = scan.next();                    
-                            userController.searchforService(searchedForService); // Calls function with service name to get the query results
+                            serviceCTRL.searchforService(searchedForService); // Calls function with service name to get the query results
                             break;
                             
                         case "2":
                         	userController.viewBalance(loginUser); // Views balance of current user
                         	break;
-                     
-                           
-                        case"3":
                         	
+                        case"3":                        	
                         	System.out.println("Enter the service you want to pay for");
                             System.out.println("Your options are: "
                             		+"\n"
@@ -190,10 +185,10 @@ public class FawrySystemApiApplication {
                              	else if(providerChoice.toLowerCase().contains("etisalat"))
                              		service=etisalat.createServiceProvider(userChoice);
                              	else
-                              	{   System.out.println("no provider with this type");
+                              	{   
+                             		System.out.println("no provider with this type");
                            		    break;
-                                }
-                            	 
+                                }	 
                            }
                             
                             else if(userChoice.contains("donation"))
@@ -246,10 +241,6 @@ public class FawrySystemApiApplication {
                             
                            break;
                            
-                 
-           		
-                      	  
-                      	    
                         case"4":
                         	
                         	// Checks first if the user has any transactions then views the user transactions.
@@ -285,13 +276,10 @@ public class FawrySystemApiApplication {
                         case"8":
                             System.out.println("You are logged out ! ");
                             signedIn = false;  // Exiting the menu
-                            break;
-                           
-                        	
-                       
-       }
+                            break;  
                         }
-                    }
+                   }
+          }
                      
 				
 				else
