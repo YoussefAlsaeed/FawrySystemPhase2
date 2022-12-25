@@ -46,6 +46,7 @@ public class DropDownField implements UIElements {
 		for(int i=0;i<array.size();i++)
 		{
 			dropDown+=">"+array.get(i);
+			dropDown+="\n";
 		}
 		dropDown+="\n---------------------------------------\n";
 		return dropDown;
