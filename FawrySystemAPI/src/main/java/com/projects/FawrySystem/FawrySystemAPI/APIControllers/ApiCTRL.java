@@ -388,13 +388,20 @@ public class ApiCTRL {
 
      }
 	 
-	
+	 @PutMapping(value="/editForm/textfield/{providerName}/{textfield}")
+	 public String addTextFieldRequest(@PathVariable ("providerName") String providerName, @PathVariable ("textfield") String textfield)
+	 {
+		 ProviderFactory provider;
+		 provider = serviceCTRL.chooseProviderFactory(providerName);
+		 return serviceCTRL.addTextField(providerName,textfield);
+	 }
 	 
-	 
-
-
-
-
-	 
+	 @PutMapping(value="/editForm/dropdown/{providerName}/{dropdownfield}")
+	 public String addDropDownFieldRequest(@RequestBody ArrayList<Object> values,@PathVariable ("providerName") String providerName ,@PathVariable ("dropdownfield") String dropdownfield)
+		{		
+			ProviderFactory provider;			
+			provider = serviceCTRL.chooseProviderFactory(providerName);
+			return serviceCTRL.addDropDownField(providerName,dropdownfield,values);
+		}	 
 	 
 }
