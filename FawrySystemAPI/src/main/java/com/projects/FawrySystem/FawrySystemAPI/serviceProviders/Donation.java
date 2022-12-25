@@ -27,7 +27,7 @@ public abstract class Donation implements IService,IServiceProviders{
 		form.view();
 		ArrayList<String> values=new ArrayList<String>();
 		//get values entered by user from form
-		values=form.getValues();
+		values=form.getValuesFromConsle();
 		System.out.println(values);
 		c.setValues(values);
 		c.setService(this);
@@ -40,6 +40,10 @@ public abstract class Donation implements IService,IServiceProviders{
 	}
 	public void setCost(double cost) {
 		this.cost = cost;
+	}
+	public Form getForm()
+	{
+		return form;
 	}
 	@Override
 	public String toString()

@@ -23,7 +23,7 @@ public abstract class InternetPayment implements IService,IServiceProviders{
 	{
 		form.view();
 		ArrayList<String> values=new ArrayList<String>();
-		values=form.getValues();
+		values=form.getValuesFromConsle();
 		System.out.println(values);
 		c.setValues(values);
 		c.setService(this);
@@ -41,6 +41,10 @@ public abstract class InternetPayment implements IService,IServiceProviders{
 	public String toString()
 	{
 		return "Internet Payment Service";
+	}
+	public Form getForm()
+	{
+		return form;
 	}
 	
 }

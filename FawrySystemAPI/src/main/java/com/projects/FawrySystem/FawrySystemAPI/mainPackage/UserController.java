@@ -22,21 +22,21 @@ import org.springframework.web.bind.annotation.RestController;
 @Service
 public class UserController{
     File file= new File("users.txt");
-    ArrayList <IService> servicesList= new ArrayList<IService>();
+    
     HashMap<String,Double> discountList = new HashMap<String,Double>();
     private static UserController instance;
     
-    public UserController (ArrayList <IService> servicesList) {
+    public UserController () {
     	
-        this.servicesList=servicesList;
+        
         discountList.put("Overall Discount",10.0);
         discountList.put("Mobile Recharge Discount", 10.0);
     }
-    public static UserController getInstance(ArrayList <IService> servicesList)
+    public static UserController getInstance()
     {
     	if(instance == null)
     	{
-			instance = new UserController(servicesList);
+			instance = new UserController();
     	}
     	return instance;
     }
@@ -68,33 +68,7 @@ public class UserController{
 					
 	}
     
-	 public ArrayList<String> searchforService(String service)
-	    {
-	        
-	        service = service.trim().toLowerCase();
-	        ArrayList<String> resultList = new ArrayList<String>();
-	        
-	        int count = 0;
-	             
-	        for(int i = 0 ; i< servicesList.size() ; i++)
-	        {
-	            if(servicesList.get(i).getClass().getSimpleName().toLowerCase().contains(service))
-	            {
-	                count++;
-	                
-	                resultList.add((count) + " . "+ servicesList.get(i).getClass().getSimpleName());
-	            }
-	        }
-	        
-	        if(count == 0)
-	        {
-	            resultList.add("Nothing matches your query :'( ");
-	        }
-	        
-	        return resultList;
-	        
-	    }
-
+	 
 	public boolean signUp(User user) throws IOException 
 	{
 		

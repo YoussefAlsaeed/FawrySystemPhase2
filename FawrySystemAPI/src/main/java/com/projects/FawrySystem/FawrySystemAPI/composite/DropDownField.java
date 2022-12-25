@@ -38,8 +38,18 @@ public class DropDownField implements UIElements {
 	{
 		this.incrementNoOfFields(1);
 		array.add(field);
-		
-		
+			
 	}
+	public String toString()
+	{
+		String dropDown= "This is ("+dropDownField+") drop down field\n <please choose from these options>\n";
+		for(int i=0;i<array.size();i++)
+		{
+			dropDown+=">"+array.get(i);
+		}
+		dropDown+="\n---------------------------------------\n";
+		return dropDown;
+	}
+	
 
 }
