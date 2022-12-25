@@ -38,7 +38,7 @@ public class AdminController {
     		provider.addPaymentMethod("wallet");
     		return true;
 		}
-		else if(s.equals("2")||s.equals("cash on delivery"))
+		else if(s.equals("2")||s.equals("cash"))
 		{
 		
 			provider.addPaymentMethod("cash on delivery");

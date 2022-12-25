@@ -44,7 +44,8 @@ public class FawrySystemApiApplication {
 	    MonthlyReceiptFactory mr=serviceCTRL.getMonthlyReceiptFactory();
 	    QuarterReceiptFactory qr=serviceCTRL.getQuarterReceiptFactory();
        
-        
+	    services=serviceCTRL.getServicesList();
+	   
         //Creating services providers using Factories
         
         IService service;
@@ -53,17 +54,17 @@ public class FawrySystemApiApplication {
 //        services.add(we.createServiceProvider("internet"));
 //        services.add(vodafone.createServiceProvider("mobile"));
 //        services.add(vodafone.createServiceProvider("internet"));
-//        services.add(orange.createServiceProvider("mobile"));
-//        services.add(orange.createServiceProvider("internet"));
-//        services.add(etisalat.createServiceProvider("mobile"));
-//        services.add(etisalat.createServiceProvider("internet"));
-//        services.add(cancerhospital.createServiceProvider("donation"));
-//        services.add(ngo.createServiceProvider("donation"));
-//        services.add(school.createServiceProvider("donation"));
+//       services.add(orange.createServiceProvider("mobile"));
+//       services.add(orange.createServiceProvider("internet"));
+//       services.add(etisalat.createServiceProvider("mobile"));
+//       services.add(etisalat.createServiceProvider("internet"));
+//       services.add(cancerhospital.createServiceProvider("donation"));
+//       services.add(ngo.createServiceProvider("donation"));
+//       services.add(school.createServiceProvider("donation"));
 //        services.add(mr.createServiceProvider("landline"));
-//        services.add(qr.createServiceProvider("landline"));
-       
-        
+//       services.add(qr.createServiceProvider("landline"));
+//       
+//        
     	
         UserController userController = UserController.getInstance();
         AdminController adminController=AdminController.getInstance();
@@ -149,7 +150,7 @@ public class FawrySystemApiApplication {
                             break;
                             
                         case "2":
-                        	userController.viewBalance(loginUser); // Views balance of current user
+                        	System.out.println(userController.viewBalance(loginUser)); // Views balance of current user
                         	break;
                         	
                         case"3":                        	
@@ -160,84 +161,52 @@ public class FawrySystemApiApplication {
                             		+ "\n-internet Payment"
                             		+ "\n-donations"
                             		+ "\n-landLine");
-                            String userChoice=scan.next();
-                            if(userChoice.contains("mobile")||userChoice.contains("internet")) // Choosing the service and service provider to pay for
-                            {
-                            	if(userChoice.contains("mobile"))
-                            		userChoice="mobile";
-                            	else if(userChoice.contains("internet"))
-                            		userChoice="internet";
-                    
-                            	 System.out.println("Enter the provider you want to pay for");
+                               String userChoice=scan.next();
+                          	 if(userChoice.contains("mobile")||userChoice.contains("internet")) // Choosing the service and service provider to pay for
+                             {
+                       
                             	 System.out.println("your options are "
                             			+"\n"
                             	 		+ "\n- we"
                             	 		+ "\n- vodafone"
                             	 		+ "\n- orange"
                             	 		+ "\n- etislat");
-                            	 String providerChoice=scan.next();
-                            	 if(providerChoice.toLowerCase().contains("we"))
-                            		 service=we.createServiceProvider(userChoice);
-                             	else if(providerChoice.toLowerCase().contains("orange"))
-                             		service=orange.createServiceProvider(userChoice);
-                             	else if(providerChoice.toLowerCase().contains("vodafone"))
-                             		service=vodafone.createServiceProvider(userChoice);
-                             	else if(providerChoice.toLowerCase().contains("etisalat"))
-                             		service=etisalat.createServiceProvider(userChoice);
-                             	else
-                              	{   
-                             		System.out.println("no provider with this type");
-                           		    break;
-                                }	 
-                           }
-                            
-                            else if(userChoice.contains("donation"))
-                            {
-                            	 System.out.println("Enter the provider you want to pay for");
+                            }
+                             else if(userChoice.contains("donation"))
+                             {
                             	 System.out.println("your options are "
                              			+"\n"
                              	 		+ "\n- school donations"
                              	 		+ "\n- ngos donations"
                              	 		+ "\n- cancer hospital donations "
                              	 		);
-                            	 
+                             }
+                             else if(userChoice.contains("landline"))
+                             {
+                             	
+                             	 System.out.println("your options are "
+                               			+"\n"
+                               	 		+ "\n- monthly receipt"
+                               	 		+ "\n- quarter reciept"
+                              	 		);
+                             }
+                             else 
+                         	 {  
+                         		System.out.println("no service with this type");
+                    		        break;
+                             }
+                          	 
+                          	 
+                             	 System.out.println("Enter the provider you want to pay for");
                             	 String providerChoice=scan.next();
-                            	 if(providerChoice.toLowerCase().contains("school"))
-                            		 service=school.createServiceProvider(userChoice);
-                             	else if(providerChoice.toLowerCase().contains("ngo"))
-                             		service=ngo.createServiceProvider(userChoice);
-                             	else if(providerChoice.toLowerCase().contains("cancer"))
-                             		service=cancerhospital.createServiceProvider(userChoice);
-                             	else
-                              	{   System.out.println("no provider with this type");
-                           		    break;
-                                }
-                            }
-                            else if(userChoice.contains("landline"))
-                            {
-                            	 System.out.println("Enter the provider you want to pay for");
-                            	 System.out.println("your options are "
-                              			+"\n"
-                              	 		+ "\n- monthly receipt"
-                              	 		+ "\n- quarter reciept"
-                             	 		);
                             	 
-                            	 String providerChoice=scan.next();
-                            	 if(providerChoice.toLowerCase().contains("monthly"))
-                            		 service= mr.createServiceProvider(userChoice);
-                             	else if(providerChoice.toLowerCase().contains("quarter"))
-                             		service=qr.createServiceProvider(userChoice);
-                             	else
-                              	{   System.out.println("no provider with this type");
-                           		    break;
-                                }
-                            }
-                            else 
-                        	{  
-                        		System.out.println("no service with this type");
-                   		        break;
-                            }
-                            adminController.addToTransactions(service.pay(loginUser), loginUser); // Calling pay method of the chosen service and saving the transaction.         
+                            	 service=serviceCTRL.createProvider(userChoice, providerChoice);
+                            	 if(service==null)
+                            	 {
+                            		 System.out.println("no provider with this type");
+                            	 }
+                            	 else
+                                     adminController.addToTransactions(service.pay(loginUser), loginUser); // Calling pay method of the chosen service and saving the transaction.         
                             
                            break;
                            
@@ -349,51 +318,12 @@ public class FawrySystemApiApplication {
 						System.out.println("-> Quarter Reciept <-");
 						System.out.println("Enter the name of the provider: ");
 						scan.nextLine();
-						String providerName=scan.nextLine();
-						if(providerName.toLowerCase().contains("vodafone"))
-						{
-						provider= vodafone;						
-						}else if(providerName.toLowerCase().contains("orange"))
-						{
-						provider =orange;
-						}else if(providerName.toLowerCase().contains("we"))
-						{
-						provider=we;
-						}
-						else if(providerName.toLowerCase().contains("etisalat"))
-						{
-						provider= etisalat;
-						}	
-						else if(providerName.toLowerCase().contains("schools"))
-						{
-						provider = school;
-						}	
-						else if(providerName.toLowerCase().contains("ngo"))
-						{
-						provider =ngo;
-						}
-						else if(providerName.toLowerCase().contains("cancer"))
-						{
-						provider = cancerhospital;
-						}
-						else if(providerName.toLowerCase().contains("monthly"))
-						{
-						provider =mr;
-						}else if(providerName.toLowerCase().contains("quarter"))
-						{
-						provider =qr;
-						
-						} else {
-							System.out.println("no provider with this type :( ");
-							break;
-						}
+						String providerFactoryName=scan.nextLine();
+						provider=serviceCTRL.chooseProviderFactory(providerFactoryName);
 						System.out.println(">>>>>You are now editing <<<<<<");
 						System.out.println("* * * * * * * * * * * * * * * * * * * * * * * ");
 						System.out.println("Enter 'wallet' to add (by wallet) /n Enter 'cash' to add (cash on delivery)");
                         
-						
-						
-					
 						String s=scan.next();
 						adminController.addPaymentMethodToProvider(provider, s);
 						break;
@@ -416,44 +346,19 @@ public class FawrySystemApiApplication {
 						System.out.println("-> Quarter Reciept <-");
 						System.out.println("Enter the name of the provider: ");
 						scan.nextLine();
-						providerName=scan.nextLine();
-						if(providerName.toLowerCase().contains("vodafone"))
-						{
-						provider= vodafone;						
-						}else if(providerName.toLowerCase().contains("orange"))
-						{
-						provider =orange;
-						}else if(providerName.toLowerCase().contains("we"))
-						{
-						provider=we;
-						}
-						else if(providerName.toLowerCase().contains("etisalat"))
-						{
-						provider= etisalat;
-						}	
-						else if(providerName.toLowerCase().contains("schools"))
-						{
-						provider = school;
-						}	
-						else if(providerName.toLowerCase().contains("ngo"))
-						{
-						provider =ngo;
-						}
-						else if(providerName.toLowerCase().contains("cancer"))
-						{
-						provider = cancerhospital;
-						}
-						else if(providerName.toLowerCase().contains("monthly"))
-						{
-						provider =mr;
-						}else if(providerName.toLowerCase().contains("quarter"))
-						{
-						provider =qr;
+						providerFactoryName=scan.nextLine();
 						
-						} else {
-							System.out.println("no provider with this type :( ");
-							choice="3";
+						provider=serviceCTRL.chooseProviderFactory(providerFactoryName);
+						if(provider==null)
+						{
+							 
+							  choice="3";
 						}
+							
+						
+						
+					  
+						
     					while (!choice.equals("3")) 
     					{
     						System.out.println("* * * * * * * * * * * * * * * * * * ");
@@ -472,7 +377,7 @@ public class FawrySystemApiApplication {
     						switch(choice)
     						{
     						case"1":
-    							    System.out.println(">>>You are now editing the "+providerName+" form<<<");
+    							    System.out.println(">>>You are now editing the "+providerFactoryName+" form<<<");
     	    						System.out.println("* * * * * * * * * * * * * * * * * * * * * * * ");
 
 									System.out.println("Enter the name of the drop down field: ");
@@ -557,7 +462,7 @@ public class FawrySystemApiApplication {
                     	}
                     	System.out.println("Choose the transaction you want to process ");
                     	String chooseTransaction;
-                    	ITransaction Transaction=null;
+                    	//ITransaction Transaction=null;
                     
                     	chooseTransaction = scan.next();
                     	if (chooseTransaction.charAt(0)=='2')

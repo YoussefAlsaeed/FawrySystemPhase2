@@ -215,8 +215,9 @@ public class UserController{
 			{  
 				String value=map.getValue()+"";
 				discounts.put(map.getKey(),value);  
+				System.out.println(map.getKey()+ " : "+map.getValue() + "%");  
 			}
-	
+	        
 			return discounts;
 			
 	}
