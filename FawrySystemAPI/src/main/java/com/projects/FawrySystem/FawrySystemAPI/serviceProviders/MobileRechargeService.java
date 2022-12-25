@@ -30,7 +30,8 @@ public abstract class MobileRechargeService implements IService,IServiceProvider
 			System.out.println(values);
 			c.setValues(values);
 		}
-		c.setValues(form.getValues());
+		else {
+		c.setValues(form.getValues());}
 		c.setService(this);
 		c.setUser(user);
 		return c.execute();

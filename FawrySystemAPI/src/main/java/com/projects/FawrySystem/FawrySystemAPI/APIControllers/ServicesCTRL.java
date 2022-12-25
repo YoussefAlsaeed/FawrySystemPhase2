@@ -71,7 +71,7 @@ public class ServicesCTRL {
           		service=etisalatFactory.createServiceProvider(userChoice);
           	else
            	{   
-          		System.out.println("no provider with this type");
+          		//System.out.println("no provider with this type");
           		return null;
              }	 
         }
@@ -85,7 +85,7 @@ public class ServicesCTRL {
           	else if(providerChoice.toLowerCase().contains("cancer"))
           		service=cancerhospitalFactory.createServiceProvider(userChoice);
           	else
-           	{   System.out.println("no provider with this type");
+           	{   //System.out.println("no provider with this type");
         		    return null;
              }
          }
@@ -97,7 +97,7 @@ public class ServicesCTRL {
           	else if(providerChoice.toLowerCase().contains("quarter"))
           		service=quarterReceiptFactory.createServiceProvider(userChoice);
           	else
-           	{   System.out.println("no provider with this type");
+           	{   //System.out.println("no provider with this type");
            			return null;
              }
          }
@@ -122,14 +122,18 @@ public class ServicesCTRL {
         {
             if(servicesList.get(i).getClass().getSimpleName().toLowerCase().contains(service))
             {
+    			
+            	 System.out.println((count+1) + " . "+ servicesList.get(i).getClass().getSimpleName()); 
+    			 resultList.add((count) + " . "+ servicesList.get(i).getClass().getSimpleName());
                 count++;
                 
-                resultList.add((count) + " . "+ servicesList.get(i).getClass().getSimpleName());
+               
             }
         }
         
         if(count == 0)
         {
+        	System.out.println("Nothing matches your query :'( ");
             resultList.add("Nothing matches your query :'( ");
         }
         
@@ -184,6 +188,10 @@ public class ServicesCTRL {
         {
             providerFactory =quarterReceiptFactory;    
         }
+        else
+        	{ System.out.println("no provider with this type :( ");
+        	  return null;
+        	}
         
         return providerFactory;
     }
