@@ -51,27 +51,36 @@ public class AdminController {
     }
     
     
-	public boolean viewRefundRequests()
-	{
-		boolean found=false;
-		ArrayList<ITransaction> transactions=admin.getTransactionList();
-		for( Entry<String, User> entry :admin.getRefundRequests().entrySet() )
-		{
-			
-		    System.out.print("UserName = "+entry.getValue().getUsername()+ " : " );
-		    for(int i=0;i<transactions.size();i++)
-		    {
-		    	if(entry.getKey().equals(transactions.get(i).getID()))
-		    	{
-		    		System.out.print(transactions.get(i)+"\n");
-		    		System.out.println("--------------------------------");
-		    		found=true;
-		    	}
-		    }
-		}
-		return found;
-		
-	}
+  	public String viewRefundRequests()
+  	{
+  		String result="";
+  		boolean found=false;
+  		ArrayList<ITransaction> transactions=admin.getTransactionList();
+  		for( Entry<String, User> entry :admin.getRefundRequests().entrySet() )
+  		{
+  			
+  		    System.out.print("UserName = "+entry.getValue().getUsername()+ " : " );
+  		    result +="UserName = "+entry.getValue().getUsername()+ " : " ;
+  		    for(int i=0;i<transactions.size();i++)
+  		    {
+  		    	if(entry.getKey().equals(transactions.get(i).getID()))
+  		    	{
+  		    		System.out.print(transactions.get(i)+"\n");
+  		    		result+=transactions.get(i)+"\n";
+  		    		System.out.println("--------------------------------");
+  		    		result+="--------------------------------";
+  		    		result+="\n";
+  		    		found=true;
+  		    	}
+  		    }
+  		}
+  		if (found==false )
+  		{
+  			result+="No Transaction Yet";
+  		}
+  		return result;
+  		
+  	}
 	
 	
 	public boolean listallTransactions()
@@ -215,21 +224,51 @@ public class AdminController {
 		   admin.addUser(user);
 	}
 	
-	public void acceptTransaction(String transactionID,User user)
+	public String acceptTransaction(String transactionID,User user)
 	{    
 		user =admin.getRefundRequests().get(transactionID);
+		if(user==null)
+		{
+			return "No refund Request made for this transaction";
+		}
 		ITransaction acceptedTransaction=null;
 		for(int i=0;i<admin.getTransactionList().size();i++)
 		{
 			if(admin.getTransactionList().get(i).getID().equals(transactionID))
 			{
 				acceptedTransaction = admin.getTransactionList().get(i);
-			
+				admin.removeFromRefundRequests(transactionID);
 			}
 		}
-		refundRequestStrategy.refund(acceptedTransaction,user);
-		refundedTransaction(acceptedTransaction, user);
+
+		refundedTransaction(acceptedTransaction, user); 
+
+		return 		
+				refundRequestStrategy.refund(acceptedTransaction,user);
+
 	}
+	public String rejecttransaction(String transactionID,User user)
+	{    
+		user =admin.getRefundRequests().get(transactionID);
+		if(user==null)
+		{
+			return "No refund Request made for this transaction";
+		}
+		for(int i=0;i<admin.getTransactionList().size();i++)
+		{
+			if(admin.getTransactionList().get(i).getID().equals(transactionID))
+			{
+				admin.removeFromRefundRequests(transactionID);
+				return "request with ID ("+transactionID+") is rejected";
+			}	
+		}
+		return "couldn't find";
+
+	}
+
+
+
+
 	
 	public void refundedTransaction(ITransaction t, User user)
 	{

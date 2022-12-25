@@ -456,7 +456,7 @@ public class FawrySystemApiApplication {
                     
                     case"5":
                     	user = new User();
-                    	if(!adminController.viewRefundRequests()) {
+                    	if(adminController.viewRefundRequests()==null) {
                     		System.out.println("No refund requests");
                     		break;
                     	}

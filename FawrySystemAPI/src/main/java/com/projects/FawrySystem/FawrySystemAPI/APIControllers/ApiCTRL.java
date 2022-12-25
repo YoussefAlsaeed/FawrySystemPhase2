@@ -28,6 +28,8 @@ import com.projects.FawrySystem.FawrySystemAPI.composite.Form;
 import com.projects.FawrySystem.FawrySystemAPI.mainPackage.AdminController;
 import com.projects.FawrySystem.FawrySystemAPI.mainPackage.User;
 import com.projects.FawrySystem.FawrySystemAPI.mainPackage.UserController;
+import com.projects.FawrySystem.FawrySystemAPI.refundRequestStrategy.AddToWalletRefundRequest;
+import com.projects.FawrySystem.FawrySystemAPI.refundRequestStrategy.PaymentRefundRequest;
 import com.projects.FawrySystem.FawrySystemAPI.serviceProviders.IService;
 import com.projects.FawrySystem.FawrySystemAPI.serviceProviders.IServiceProviders;
 import com.projects.FawrySystem.FawrySystemAPI.transaction.AddToWalletTransaction;
@@ -35,6 +37,7 @@ import com.projects.FawrySystem.FawrySystemAPI.transaction.ITransaction;
 @RestController
 public class ApiCTRL {
 	 User currentUser ;
+	 User user;
 	 ArrayList <IService> services = new ArrayList<>();
 	 ArrayList <User> users=FawrySystemApiApplication.users;
      UserController userController;  
@@ -345,6 +348,47 @@ public class ApiCTRL {
 			
 			
 		}
+	 @GetMapping(value = "/reviewRefundRequest/{chooseTransaction}/{acceptance}")
+	 public String reviewRefundRequest(@PathVariable ("chooseTransaction") String chooseTransaction,@PathVariable("acceptance") String acceptance)
+	 {
+     	//ITransaction Transaction=null;
+
+       user = new User();
+
+		 if (chooseTransaction.charAt(0)=='2')
+     	{
+			 return "NO transacion";
+     	}
+     	String requestType=chooseTransaction.substring(0,1);
+     	if(acceptance.equals("1"))
+    	{   
+    		if(requestType.equals("0"))
+    		  adminController.setRefundRequest(new AddToWalletRefundRequest());
+    		
+    		
+    		else if(requestType.equals("1"))
+      		  adminController.setRefundRequest(new PaymentRefundRequest());
+    		
+    		 return
+    				 adminController.acceptTransaction(chooseTransaction,user);
+    	}
+    	return adminController.rejecttransaction(chooseTransaction,user);
+	 }
+	 
+	 
+	 @GetMapping(value = "/viewRefundRequest")
+	 public String viewRefundRequest()
+	 {
+		 String result=adminController.viewRefundRequests();
+		 if(result==null)
+		 {
+			 return "NO Transaction Yet";
+		 }
+		 return result;
+
+     }
+	 
+	
 	 
 	 
 
