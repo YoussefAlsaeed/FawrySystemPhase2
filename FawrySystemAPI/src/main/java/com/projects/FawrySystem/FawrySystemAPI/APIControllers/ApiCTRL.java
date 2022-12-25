@@ -147,8 +147,20 @@ public class ApiCTRL {
 		
 		
    }
+	@PutMapping(value="/removeDiscount/{choice}")
+	public  String removeDiscount (@PathVariable ("choice") String choice)
+   {
 	
-	
+		if(signedIn)
+		{
+			return adminController.removeDiscount(choice, userController);
+			
+		}
+		else
+			return "An Error Occured, Please Login First";
+		
+		
+   }	
 	
 	@GetMapping(value = "/viewTransactions")
 	public ArrayList<String> viewTransactions()
