@@ -389,10 +389,12 @@ public class FawrySystemApiApplication {
 						}
 						System.out.println(">>>>>You are now editing <<<<<<");
 						System.out.println("* * * * * * * * * * * * * * * * * * * * * * * ");
-						System.out.println("Enter '1' to add (by wallet) /n Enter '2' to add (cash on delivery)");
-
-						String s = null;
-						s=scan.next();
+						System.out.println("Enter 'wallet' to add (by wallet) /n Enter 'cash' to add (cash on delivery)");
+                        
+						
+						
+					
+						String s=scan.next();
 						adminController.addPaymentMethodToProvider(provider, s);
 						break;
 						

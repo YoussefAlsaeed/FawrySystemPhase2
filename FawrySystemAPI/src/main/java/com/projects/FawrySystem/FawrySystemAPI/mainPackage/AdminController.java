@@ -19,7 +19,7 @@ public class AdminController {
 	Admin admin=new Admin();
 	private static AdminController instance;
     IRefundRequest refundRequestStrategy;
-    
+   
     public static  AdminController getInstance()
     {
 
@@ -30,13 +30,24 @@ public class AdminController {
     	return instance;
     }
     
-    public void addPaymentMethodToProvider(ProviderFactory provider ,String s)
+    public boolean addPaymentMethodToProvider(ProviderFactory provider ,String s)
     {
-    	if(s.equals("1"))
-			provider.addPaymentMethod("wallet");
-		else if(s.equals("2"))
+    	if(s.equals("1")||s.equals("wallet"))
+		{
+    		
+    		provider.addPaymentMethod("wallet");
+    		return true;
+		}
+		else if(s.equals("2")||s.equals("cash on delivery"))
+		{
+		
 			provider.addPaymentMethod("cash on delivery");
-		else System.out.println("Choice invalid!");
+			return true;
+		}
+		else {
+			System.out.println("Choice invalid!");
+			return false;
+		}
     }
     
     

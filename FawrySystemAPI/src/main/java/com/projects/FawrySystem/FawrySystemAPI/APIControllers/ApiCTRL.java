@@ -19,6 +19,7 @@ import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.EtisalatFactory;
 import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.MonthlyReceiptFactory;
 import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.NGOFactory;
 import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.OrangeFactory;
+import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.ProviderFactory;
 import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.QuarterReceiptFactory;
 import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.SchoolProviderFactory;
 import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.VodafoneFactory;
@@ -48,7 +49,7 @@ public class ApiCTRL {
      MonthlyReceiptFactory mr=new MonthlyReceiptFactory();
      QuarterReceiptFactory qr=new QuarterReceiptFactory();
      ServicesCTRL serviceCTRL;
-     boolean signedIn;
+     boolean signedIn=false;
      
 	public ApiCTRL() {
 		super();
@@ -312,10 +313,12 @@ public class ApiCTRL {
 	 @PostMapping (value="/pay/{service}/{serviceProvider}")
 	 public String pay(@RequestBody ArrayList<String> values,@PathVariable ("service") String service,@PathVariable ("serviceProvider") String serviceProvider)
 	 {
+		
 		 if(!signedIn)
 	        {
 	            return "An Error Occured Please Login First";
 	        }
+		 
 		 IService serviceProviderObj= serviceCTRL.createProvider(service,serviceProvider); //creates service provider using abstract factory
 		 Form form=serviceProviderObj.getForm();
 		 form.setValues(values);
@@ -324,6 +327,24 @@ public class ApiCTRL {
 		 String result=transaction.toString();
 		 return result;
 	 }
+	 
+	 
+	 @PutMapping(value="/addPaymentMethod/{providerFactoryName}/{paymentChoice}")
+		public String addPaymentMethodd(@PathVariable ("providerFactoryName") String providerFactoryName ,@PathVariable("paymentChoice")String paymentChoice )
+		{ 
+		 
+	
+			ProviderFactory providerFactory=serviceCTRL.chooseProviderFactory(providerFactoryName);
+			
+			if(adminController.addPaymentMethodToProvider(providerFactory, paymentChoice))
+				return "A new payment method : <"+paymentChoice+"> is added!";
+			else
+		       return "the choice of this payment method is not supported by the system yet :( ";
+			
+		
+			
+			
+		}
 	 
 	 
 
