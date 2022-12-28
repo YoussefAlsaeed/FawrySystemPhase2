@@ -1,38 +1,17 @@
 package com.projects.FawrySystem.FawrySystemAPI.APIControllers;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import com.projects.FawrySystem.FawrySystemAPI.FawrySystemApiApplication;
-import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.CancerHospitalFactory;
-import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.EtisalatFactory;
-import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.MonthlyReceiptFactory;
-import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.NGOFactory;
-import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.OrangeFactory;
 import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.ProviderFactory;
-import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.QuarterReceiptFactory;
-import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.SchoolProviderFactory;
-import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.VodafoneFactory;
-import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.WeFactory;
-import com.projects.FawrySystem.FawrySystemAPI.composite.Form;
 import com.projects.FawrySystem.FawrySystemAPI.mainPackage.AdminController;
 import com.projects.FawrySystem.FawrySystemAPI.mainPackage.User;
 import com.projects.FawrySystem.FawrySystemAPI.mainPackage.UserController;
 import com.projects.FawrySystem.FawrySystemAPI.refundRequestStrategy.AddToWalletRefundRequest;
 import com.projects.FawrySystem.FawrySystemAPI.refundRequestStrategy.PaymentRefundRequest;
 import com.projects.FawrySystem.FawrySystemAPI.serviceProviders.IService;
-import com.projects.FawrySystem.FawrySystemAPI.serviceProviders.IServiceProviders;
-import com.projects.FawrySystem.FawrySystemAPI.transaction.AddToWalletTransaction;
 import com.projects.FawrySystem.FawrySystemAPI.transaction.ITransaction;
 @RestController
 public class ApiCTRL {
@@ -42,15 +21,6 @@ public class ApiCTRL {
 	 ArrayList <User> users=FawrySystemApiApplication.users;
      UserController userController;  
      AdminController adminController=AdminController.getInstance();
-     WeFactory we=new WeFactory();
-     VodafoneFactory vodafone=new VodafoneFactory();
-     OrangeFactory orange=new OrangeFactory();
-     EtisalatFactory etisalat=new EtisalatFactory();
-     CancerHospitalFactory cancerhospital=new  CancerHospitalFactory(); 
-     NGOFactory ngo=new NGOFactory(); 
-     SchoolProviderFactory school=new SchoolProviderFactory();
-     MonthlyReceiptFactory mr=new MonthlyReceiptFactory();
-     QuarterReceiptFactory qr=new QuarterReceiptFactory();
      ServicesCTRL serviceCTRL;
      boolean signedIn=false;
      
@@ -86,11 +56,11 @@ public class ApiCTRL {
 				 return results;
 			 }
 	}
-	@GetMapping(value="/login")
+	@GetMapping(value="/user/check")
     public String loginAPI(@RequestBody User user)
-    { 
-		
+    { 	
 		boolean found=false;
+		String result="";
 		if(userController.login(user))
         { 
 			for(int i=0;i<users.size();i++)            //Checks if the user already exists in the system
@@ -99,28 +69,32 @@ public class ApiCTRL {
                 {
                 	currentUser=users.get(i);
                 	found=true;
-                    
+                	result+=userController.getUserInfo(users.get(i));
+                			                   
                 }
             }
-            if(!found)
+            if(!found)//if user has not logged in before
             {
             	currentUser=user;
                 users.add(user); 
+                result+=userController.getUserInfo(user);
             }
             signedIn=true;
-            return "Login Successful";
+            
+            return "Login Successful\n"+result;
         }
 		else return "User Not Found,Please signup first";
     }
 	
-	@PutMapping(value="/addToWallet/{amount}")
+	@PutMapping(value="/user/updateWallet/{amount}")
 	public String addToWallet(@PathVariable ("amount") double amount )
 	{
 		if(signedIn){
 			
 		 if(userController.addToWallet(amount, currentUser, adminController)) // Adding money from credit card to current user's wallet and saving the transaction.
 		 {
-			 return "Amount added to wallet = "+currentUser.getWallet()+"\n Creditcard balance =  "+currentUser.getCreditCard();
+			 String result="Amount added to wallet = "+amount+"\n";
+			 return result+"Your wallet balance now  = "+currentUser.getWallet()+"\n Creditcard balance =  "+currentUser.getCreditCard();
 		 }
 		 else return"Transaction failed ,Not enough balance in your creditcard\n Creditcard balance = " +currentUser.getCreditCard();
 		 }
@@ -129,36 +103,23 @@ public class ApiCTRL {
 			
 			
 	}
-	@PutMapping(value="/addDiscount/{choice}/{discount}")
+	@PutMapping(value="/discount/updatePercentage/{choice}/{discount}")
 	public  String addDiscount (@PathVariable ("choice") String choice,@PathVariable("discount") double discount)
    {
 	
-		if(signedIn)
-		{
-			return adminController.addDiscount(choice, discount, userController);
-			
-		}
-		else
-			return "An Error Occured, Please Login First";
-		
+		return adminController.addDiscount(choice, discount, userController);
 		
    }
-	@PutMapping(value="/removeDiscount/{choice}")
+	@PutMapping(value="/discount/removeDiscount/{choice}")
 	public  String removeDiscount (@PathVariable ("choice") String choice)
    {
 	
-		if(signedIn)
-		{
-			return adminController.removeDiscount(choice, userController);
+		return adminController.removeDiscount(choice, userController);
 			
-		}
-		else
-			return "An Error Occured, Please Login First";
-		
 		
    }	
 	
-	@GetMapping(value = "/viewTransactions")
+	@GetMapping(value = "/user/getTransactions")
 	public ArrayList<String> viewTransactions()
 	{
 		ArrayList<String> responses = new ArrayList<String>();
@@ -219,7 +180,7 @@ public class ApiCTRL {
 		return null;
 	 }
 	 
-	 @GetMapping(value="/viewMyBalance")
+	 @GetMapping(value="/user/get/Wallet/Creditcard")
 	 public String viewMyBalance() 
 	 {
 		// currentUser=user;
@@ -231,7 +192,7 @@ public class ApiCTRL {
 			 return userController.viewBalance(currentUser);
 		 
 	 }
-	 @GetMapping(value="/viewDiscounts")
+	 @GetMapping(value="/discount/getAll")
 	 public HashMap<String,String> viewDiscounts() 
 	 {
 		 HashMap<String,String> discounts =new HashMap<String,String>();
@@ -247,7 +208,7 @@ public class ApiCTRL {
 		 
 	 }
 	 
-	 @GetMapping(value="/listUserTransactions/{username}")
+	 @GetMapping(value="/admin/transactions/getUserTransactions/{username}")
 	 public ArrayList<String> listUserTransactions(@PathVariable ("username") String username)
 	 {	 
 		 ArrayList<String> message = new ArrayList<String>();
@@ -271,13 +232,14 @@ public class ApiCTRL {
 		 
 	 }
 	 @GetMapping(value="/logout")
-	 public String logOut(@RequestBody User user)
+	 public String logOut()
 	 {
 	    signedIn=false;
+	    currentUser=null;
 	    return "You are logged out ! ";
 		 
 	 }
-	 @GetMapping(value = "/listAllTransaction")
+	 @GetMapping(value = "/admin/transactions/getAll")
 		public ArrayList<String> listAllTransactions()
 		{
 			ArrayList<String> newresponses = new ArrayList<String>();
@@ -305,7 +267,7 @@ public class ApiCTRL {
 			return newresponses;
 		}
 	 
-	 @GetMapping(value="/getForm/{service}/{serviceProvider}")
+	 @GetMapping(value="/serviceProvider/getForm/{service}/{serviceProvider}")
 	 public String getForm(@PathVariable ("service") String service,@PathVariable ("serviceProvider") String serviceProvider)
 	 {
 		 IService serviceProviderObj= serviceCTRL.createProvider(service,serviceProvider); //creates service provider using abstract factory
@@ -313,39 +275,44 @@ public class ApiCTRL {
 		 return form;
 	 }
 	 
-	 @PostMapping (value="/pay/{service}/{serviceProvider}")
+	 @PostMapping (value="/paymentTransaction/create/{service}/{serviceProvider}")
 	 public String pay(@RequestBody ArrayList<String> values,@PathVariable ("service") String service,@PathVariable ("serviceProvider") String serviceProvider)
-	 {
-		
+	 {	
 		 if(!signedIn)
 	        {
 	            return "An Error Occured Please Login First";
 	        }
 		 
 		 IService serviceProviderObj= serviceCTRL.createProvider(service,serviceProvider); //creates service provider using abstract factory
-		 Form form=serviceProviderObj.getForm();
-		 form.setValues(values);
-		 ITransaction transaction=serviceProviderObj.pay(currentUser);
-		 adminController.addToTransactions(transaction, currentUser);
-		 String result=transaction.toString();
+		 String result=serviceCTRL.validate(serviceProviderObj,values);
+		 if(result==null)
+		 {
+			 serviceCTRL.setFormValues(serviceProviderObj,values);
+//			 Form form=serviceProviderObj.getForm();
+//			 form.setValues(values);
+			 ITransaction transaction=serviceProviderObj.pay(currentUser);
+			 if (transaction==null)
+			 {
+				 return "An Error Occured please check your balance and The payment method";
+			 }
+			 adminController.addToTransactions(transaction, currentUser);
+			 result="Amount before applying discounts = "+values.get(1)+"\n Amount after applying discounts = "+transaction.getAmount()+"\n";
+			 
+			 result+=transaction.toString();
+		 }
+		 
 		 return result;
 	 }
 	 
 	 
-	 @PutMapping(value="/addPaymentMethod/{providerFactoryName}/{paymentChoice}")
+	 @PutMapping(value="/form/addPaymentMethod/{providerFactoryName}/{paymentChoice}")
 		public String addPaymentMethodd(@PathVariable ("providerFactoryName") String providerFactoryName ,@PathVariable("paymentChoice")String paymentChoice )
 		{ 
-		 
-	
-			ProviderFactory providerFactory=serviceCTRL.chooseProviderFactory(providerFactoryName);
-			
+			ProviderFactory providerFactory=serviceCTRL.chooseProviderFactory(providerFactoryName);	
 			if(adminController.addPaymentMethodToProvider(providerFactory, paymentChoice))
 				return "A new payment method : <"+paymentChoice+"> is added!";
 			else
-		       return "the choice of this payment method is not supported by the system yet :( ";
-			
-		
-			
+		       return "The choice of this payment method already exists or is not supported by the system yet :( ";
 			
 		}
 	 @GetMapping(value = "/reviewRefundRequest/{chooseTransaction}/{acceptance}")
@@ -376,7 +343,7 @@ public class ApiCTRL {
 	 }
 	 
 	 
-	 @GetMapping(value = "/viewRefundRequest")
+	 @GetMapping(value = "/admin/getRefundRequest")
 	 public String viewRefundRequest()
 	 {
 		 String result=adminController.viewRefundRequests();
@@ -391,16 +358,17 @@ public class ApiCTRL {
 	 @PutMapping(value="/editForm/textfield/{providerName}/{textfield}")
 	 public String addTextFieldRequest(@PathVariable ("providerName") String providerName, @PathVariable ("textfield") String textfield)
 	 {
-		 ProviderFactory provider;
-		 provider = serviceCTRL.chooseProviderFactory(providerName);
+//		 ProviderFactory provider;
+//		 provider = serviceCTRL.chooseProviderFactory(providerName);
 		 return serviceCTRL.addTextField(providerName,textfield);
 	 }
 	 
 	 @PutMapping(value="/editForm/dropdown/{providerName}/{dropdownfield}")
 	 public String addDropDownFieldRequest(@RequestBody ArrayList<Object> values,@PathVariable ("providerName") String providerName ,@PathVariable ("dropdownfield") String dropdownfield)
 		{		
-			ProviderFactory provider;			
-			provider = serviceCTRL.chooseProviderFactory(providerName);
+//			ProviderFactory provider;			
+//			provider = serviceCTRL.chooseProviderFactory(providerName);
+		 	
 			return serviceCTRL.addDropDownField(providerName,dropdownfield,values);
 		}	 
 	 

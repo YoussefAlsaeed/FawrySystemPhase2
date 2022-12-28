@@ -26,6 +26,7 @@ public class UserController{
     HashMap<String,Double> discountList = new HashMap<String,Double>();
     private static UserController instance;
     
+    
     public UserController () {
     	
         
@@ -150,7 +151,7 @@ public class UserController{
          }
         return found;
     }
-  
+ 
     public String loginAPI(User user)
     { 
          String found="Login Unsuccessful";
@@ -221,5 +222,9 @@ public class UserController{
 			return discounts;
 			
 	}
+    public String getUserInfo(User user)
+    {
+    	return user.toString();
+    }
 
 }

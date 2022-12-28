@@ -21,11 +21,7 @@ public abstract class LandLine implements IService,IServiceProviders{
 	}
 	public ITransaction pay(User user)
 	{
-		form.view();
-		ArrayList<String> values=new ArrayList<String>();
-		values=form.getValuesFromConsle();
-		System.out.println(values);
-		c.setValues(values);
+		c.setValues(form.getValues());
 		c.setService(this);
 		c.setUser(user);
 		return c.execute();
