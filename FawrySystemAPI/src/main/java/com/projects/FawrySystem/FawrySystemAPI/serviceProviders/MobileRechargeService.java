@@ -22,16 +22,7 @@ public abstract class MobileRechargeService implements IService,IServiceProvider
 	}
 	public ITransaction pay(User user)
 	{
-		if(form.getValues()==null)
-		{
-			form.view();
-			ArrayList<String> values=new ArrayList<String>();
-			values=form.getValuesFromConsle();
-			System.out.println(values);
-			c.setValues(values);
-		}
-		else {
-		c.setValues(form.getValues());}
+		c.setValues(form.getValues());
 		c.setService(this);
 		c.setUser(user);
 		return c.execute();

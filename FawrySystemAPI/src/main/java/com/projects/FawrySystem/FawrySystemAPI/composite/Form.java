@@ -1,7 +1,7 @@
 package com.projects.FawrySystem.FawrySystemAPI.composite;
 
 import java.util.ArrayList;
-import java.util.Scanner;
+//import java.util.Scanner;
 
 public class Form implements UIElements {
 	String formName;
@@ -45,6 +45,23 @@ public class Form implements UIElements {
 	}
 	
 	
+	public ArrayList<UIElements> getElements() {
+		return elements;
+	}
+	
+	public ArrayList<Object> getField() {
+        ArrayList<Object> values=new ArrayList<Object>();
+        for(int i=0;i<elements.size();i++)
+        {
+        
+            values.add(elements.get(i).getField());
+        
+        }
+        return values;
+    }
+	public void setElements(ArrayList<UIElements> elements) {
+		this.elements = elements;
+	}
 	//add UIEelements to form
 	public void addElement(UIElements element)
 	{
@@ -52,23 +69,23 @@ public class Form implements UIElements {
 	}
 	
 	//method to allow user to enter values for the form
-	public ArrayList<String> getValuesFromConsle()
-	{
-		Scanner sc=new Scanner(System.in);
-		ArrayList<String> input=new ArrayList<String>();
-		System.out.println("\nPlease Enter your answers by order");
-		int counter=1;
-		for(int i=0;i<elements.size();i++)
-		{
-			System.out.print(counter+": ");
-			input.add(sc.nextLine());
-			counter++;
-			
-		}
-		
-		return input;
-		
-	}
+//	public ArrayList<String> getValuesFromConsle()
+//	{
+//		Scanner sc=new Scanner(System.in);
+//		ArrayList<String> input=new ArrayList<String>();
+//		System.out.println("\nPlease Enter your answers by order");
+//		int counter=1;
+//		for(int i=0;i<elements.size();i++)
+//		{
+//			System.out.print(counter+": ");
+//			input.add(sc.nextLine());
+//			counter++;
+//			
+//		}
+//		
+//		return input;
+//		
+//	}
 	public  ArrayList<String> getValues()
 	{
 		return values;
@@ -82,6 +99,11 @@ public class Form implements UIElements {
 	public void setName(String name)
 	{
 		this.formName=name;
+	}
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return formName;
 	}
 	
 }

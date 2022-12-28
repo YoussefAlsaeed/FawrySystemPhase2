@@ -67,8 +67,10 @@ public abstract class ProviderFactory {
 	 * method to add more payment methods to a form 
 	 *  wallet or cash on delivery methods can be added from here
 	 */
-	public void addPaymentMethod(Object newField)
+	public boolean addPaymentMethod(Object newField)
 	{	
-		this.d.addField(newField);
+		
+		return this.d.addField(newField);
+		
 	}
 }

@@ -24,15 +24,9 @@ public abstract class Donation implements IService,IServiceProviders{
 	}
 	public ITransaction pay(User user)
 	{
-		form.view();
-		ArrayList<String> values=new ArrayList<String>();
-		//get values entered by user from form
-		values=form.getValuesFromConsle();
-		System.out.println(values);
-		c.setValues(values);
+		c.setValues(form.getValues());
 		c.setService(this);
 		c.setUser(user);
-		//execute
 		return c.execute();
 	}
 	public double getCost() {

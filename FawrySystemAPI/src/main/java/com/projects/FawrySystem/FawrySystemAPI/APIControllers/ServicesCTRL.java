@@ -12,8 +12,11 @@ import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.QuarterReceiptFac
 import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.SchoolProviderFactory;
 import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.VodafoneFactory;
 import com.projects.FawrySystem.FawrySystemAPI.abstractFactory.WeFactory;
+import com.projects.FawrySystem.FawrySystemAPI.composite.DropDownField;
+import com.projects.FawrySystem.FawrySystemAPI.composite.Form;
 import com.projects.FawrySystem.FawrySystemAPI.mainPackage.UserController;
 import com.projects.FawrySystem.FawrySystemAPI.serviceProviders.IService;
+import com.projects.FawrySystem.FawrySystemAPI.transaction.ITransaction;
 
 public class ServicesCTRL {
 	ArrayList<IService> servicesFactory;
@@ -245,8 +248,24 @@ public class ServicesCTRL {
 	public ArrayList<IService> getServicesList() {
 		return servicesList;
 	}
-
-	
-	
-
+	public String validate(IService serviceProviderObj, ArrayList<String> values) {
+		String paymentMethod = values.get(0);
+		ArrayList<Object> validPaymentMethods =serviceProviderObj.getForm().getElements().get(0).getField();
+		System.out.println(validPaymentMethods);
+		for(int i=0;i<validPaymentMethods.size();i++)
+		{
+			if(validPaymentMethods.get(i).toString().toLowerCase().contains(paymentMethod.toLowerCase()))
+			{
+				return null;
+			}
+		}
+		return "Payment method not found";
+		
+		
+	}
+	public void setFormValues(IService serviceProviderObj, ArrayList<String> values) {
+		 Form form=serviceProviderObj.getForm();
+		 form.setValues(values);
+		
+	}
 }

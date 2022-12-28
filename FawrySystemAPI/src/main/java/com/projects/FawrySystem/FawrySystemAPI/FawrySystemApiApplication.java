@@ -206,8 +206,20 @@ public class FawrySystemApiApplication {
                             		 System.out.println("no provider with this type");
                             	 }
                             	 else
-                                     adminController.addToTransactions(service.pay(loginUser), loginUser); // Calling pay method of the chosen service and saving the transaction.         
-                            
+                            	 {
+                            		 System.out.println(serviceCTRL.getForm(service));
+                            		 ArrayList<String> values=new ArrayList<String>();
+                            		 for(int i=0;i<service.getForm().getElements().size();i++)
+                            		 {
+                            			 System.out.println("Enter "+service.getForm().getElements().get(i).getName()+" : ");
+                            			 values.add(scan.next());
+                            		 }
+                            		 serviceCTRL.validate(service, values);
+                            		 serviceCTRL.setFormValues(service,values);
+                            		 adminController.addToTransactions(service.pay(loginUser), loginUser); // Calling pay method of the chosen service and saving the transaction.         
+                                     
+                            	 }
+                                     
                            break;
                            
                         case"4":

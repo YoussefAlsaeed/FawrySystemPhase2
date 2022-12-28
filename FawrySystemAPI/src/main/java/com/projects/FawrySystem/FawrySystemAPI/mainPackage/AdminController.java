@@ -33,16 +33,12 @@ public class AdminController {
     public boolean addPaymentMethodToProvider(ProviderFactory provider ,String s)
     {
     	if(s.equals("1")||s.equals("wallet"))
-		{
-    		
-    		provider.addPaymentMethod("wallet");
-    		return true;
+		{	
+    		return provider.addPaymentMethod("wallet");
 		}
 		else if(s.equals("2")||s.equals("cash"))
 		{
-		
-			provider.addPaymentMethod("cash on delivery");
-			return true;
+			return provider.addPaymentMethod("cash on delivery");
 		}
 		else {
 			System.out.println("Choice invalid!");
