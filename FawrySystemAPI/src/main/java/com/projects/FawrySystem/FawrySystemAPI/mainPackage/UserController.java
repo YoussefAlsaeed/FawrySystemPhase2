@@ -184,7 +184,11 @@ public class UserController{
     { 	   
  	   return user.printTransactions();
     }
-    
+
+    public boolean inTransactionHistory(User user,String c)
+       { 	   
+    	   return user.checkForTransaction(user,c);
+       }
     public ArrayList<ITransaction> getUserTransactions(User user)
     {
     	return user.getTransactionList();

@@ -9,6 +9,8 @@ public class Admin {
     private HashMap<String,User> refundRequests=new HashMap<String,User>();
     private ArrayList <ITransaction>transactions=new ArrayList<ITransaction>();
     private ArrayList <User>users=new ArrayList<User>();
+    private ArrayList <String>AccpetedRefunds=new ArrayList<String>();
+    
     
     
     public void setTransactionList(ArrayList<ITransaction> transactionList) {
@@ -71,5 +73,8 @@ public class Admin {
         }
         return true;
     }
+	public ArrayList <String> getAccpetedRefunds() {
+		return AccpetedRefunds;
+	}
 
 }
