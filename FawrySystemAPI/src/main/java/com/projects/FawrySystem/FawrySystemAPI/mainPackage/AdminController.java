@@ -108,7 +108,7 @@ public class AdminController {
 	
 	public String addDiscount(String c,double discount, UserController userController)
 	{
-		if(c.equals("1"))
+		if(c.equals("1")||c.toLowerCase().equals("mobile"))
     	{
     		//MobileRechargeDiscount d=new MobileRechargeDiscount(null);
     		MobileRechargeDiscount.setDiscountPercentage(discount/100);
@@ -117,7 +117,7 @@ public class AdminController {
     		return"Mobile Recharge Discount now is:"+Mrdiscount; 
 
     	}
-    	else if(c.equals("2"))
+    	else if(c.equals("2")||c.toLowerCase().equals("internet"))
     	{
     		//MobileRechargeDiscount d=new MobileRechargeDiscount(null);
     		InternetDiscount.setDiscountPercentage(discount/100);
@@ -127,7 +127,7 @@ public class AdminController {
 
     	}
     	
-    	else if(c.equals("3"))
+    	else if(c.equals("3")||c.toLowerCase().equals("landline"))
     	{
     		//MobileRechargeDiscount d=new MobileRechargeDiscount(null);
     		LandLineDiscount.setDiscountPercentage(discount/100);
@@ -136,7 +136,7 @@ public class AdminController {
     		return"Landline Discount now is:"+Ldiscount;
 
     	}
-    	else if(c.equals("4"))
+    	else if(c.equals("4")||c.toLowerCase().equals("donation"))
     	{
     		//MobileRechargeDiscount d=new MobileRechargeDiscount(null);
     		DonationsDiscount.setDiscountPercentage(discount/100);
@@ -145,7 +145,7 @@ public class AdminController {
     		return "Donation Discount now is:"+Ddiscount;
 
     	}
-    	else if(c.equals("5"))
+    	else if(c.equals("5")||c.toLowerCase().equals("overall"))
     	{
     		//MobileRechargeDiscount d=new MobileRechargeDiscount(null);
     		OverallDiscount.setDiscountPercentage(discount/100);
@@ -159,14 +159,14 @@ public class AdminController {
 
 	public String removeDiscount(String c, UserController userController)
 	{
-		if(c.equals("1"))
+		if(c.equals("1")||c.toLowerCase().equals("mobile"))
     	{
     		MobileRechargeDiscount.setDiscountPercentage(0.0);
     		String Mrdiscount=MobileRechargeDiscount.getDis()+"";
     		userController.removeDiscountList("Mobile Recharge Discount",0.0);
     		return"Mobile Recharge Discount now is:"+Mrdiscount; 
     	}
-    	else if(c.equals("2"))
+    	else if(c.equals("2")||c.toLowerCase().equals("internet"))
     	{
     		InternetDiscount.setDiscountPercentage(0.0);
     		String Idiscount=InternetDiscount.getDis()+""; 
@@ -174,7 +174,7 @@ public class AdminController {
     		return"Internet Discount now is:"+Idiscount;
 
     	}
-    	else if(c.equals("3"))
+    	else if(c.equals("3")||c.toLowerCase().equals("landline"))
     	{
     		LandLineDiscount.setDiscountPercentage(0.0);
     		String Ldiscount=LandLineDiscount.getDis()+""; 
@@ -182,7 +182,7 @@ public class AdminController {
     		return"Landline Discount now is:"+Ldiscount;
 
     	}
-    	else if(c.equals("4"))
+    	else if(c.equals("4")||c.toLowerCase().equals("donation"))
     	{
     		DonationsDiscount.setDiscountPercentage(0.0);
     		String Ddiscount=DonationsDiscount.getDis()+""; 
@@ -190,7 +190,7 @@ public class AdminController {
     		return "Donation Discount now is:"+Ddiscount;
 
     	}
-    	else if(c.equals("5"))
+    	else if(c.equals("5")||c.toLowerCase().equals("overall"))
     	{
     		OverallDiscount.setDiscountPercentage(0.0);
     		String Odiscount=OverallDiscount.getDis()+""; 
@@ -201,17 +201,31 @@ public class AdminController {
     	else return"Invalid choice";
     	
 	}
-	
 
-	public void addToRefundRequests(User user, String transactionID) {
-		for(int i=0;i<admin.getTransactionList().size();i++)
+	public String addToRefundRequests(User user, String transactionID)
+	{
+		boolean found=false;
+		for (int i = 0;i<admin.getAccpetedRefunds().size();i++)
 		{
-			if(admin.getTransactionList().get(i).getID().equals(transactionID))
+			if(admin.getAccpetedRefunds().get(i).equals(transactionID))
 			{
-				admin.addToRefundRequests(transactionID, user);
+				found = true ;
 			}
 		}
 		
+		for(int i=0;i<admin.getTransactionList().size();i++)
+		{
+			if(admin.getTransactionList().get(i).getID().equals(transactionID) && !found)
+			{
+				admin.addToRefundRequests(transactionID, user);
+			}			
+		}
+		if(found)
+		{
+			return "Refund already sent to the admin";
+		}
+		
+        return "Your request will be accepted/rejected by the admin";	
 	}
 
 	public void addToTransactions(ITransaction t, User user) {
@@ -234,6 +248,7 @@ public class AdminController {
 			{
 				acceptedTransaction = admin.getTransactionList().get(i);
 				admin.removeFromRefundRequests(transactionID);
+				admin.getAccpetedRefunds().add(transactionID);
 			}
 		}
 

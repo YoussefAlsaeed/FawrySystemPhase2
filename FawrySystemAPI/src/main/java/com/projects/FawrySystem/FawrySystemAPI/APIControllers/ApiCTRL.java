@@ -155,14 +155,16 @@ public class ApiCTRL {
         {
             return "An Error Occured Please Login First";
         }
-        if((boolean)userController.viewUserTransactionHistory(currentUser))
+        if(userController.inTransactionHistory(currentUser,TransactionID))
         {
-	        adminController.addToRefundRequests(currentUser, TransactionID);
-	        return "Your request will be accepted/rejected by the admin";
-        }
-        return"No Transaction with this  ID" ;
+        	
+	        return adminController.addToRefundRequests(currentUser, TransactionID);
 
+        }
+        else 
+        	return"No Transaction with this  ID" ;
     }
+
 	 @PostMapping(value="/signup")
 	 public String signup(@RequestBody User user)
 	 {
@@ -327,7 +329,7 @@ public class ApiCTRL {
 			 return "NO transacion";
      	}
      	String requestType=chooseTransaction.substring(0,1);
-     	if(acceptance.equals("1"))
+     	if(acceptance.equals("1") || acceptance.equals( "accept"))
     	{   
     		if(requestType.equals("0"))
     		  adminController.setRefundRequest(new AddToWalletRefundRequest());

@@ -71,6 +71,27 @@ public class User
 			}
 			return true;
 		}
+		public boolean checkForTransaction(User user, String c)
+		{
+			boolean found=false;
+			
+			if(transactionList.size()==0)
+			{
+				found= false;
+			}
+			else
+			{
+				for(int i = 0;i<transactionList.size();i++)
+				{
+					if(getTransactionList().get(i).getID().equals(c))
+					{
+						found= true;
+					}
+				}
+			}
+			return found;
+		}
+
 		
 		public void addTransaction(ITransaction t)
 		{
