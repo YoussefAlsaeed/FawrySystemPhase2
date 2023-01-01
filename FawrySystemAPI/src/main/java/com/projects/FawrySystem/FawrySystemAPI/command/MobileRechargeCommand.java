@@ -18,7 +18,9 @@ public class MobileRechargeCommand extends Command {
 		service.setCost(c);	//set the service cost to the amount that the user entered
 		String sName=service.toString();
 		System.out.println("-----------------------");
+		
 		applyDiscounts();//get cost after applying discounts (decorator)
+		
 		System.out.println("-----------------------");
 		double amount=service.getCost();
 		
