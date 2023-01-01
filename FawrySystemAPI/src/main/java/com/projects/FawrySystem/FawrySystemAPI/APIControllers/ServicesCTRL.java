@@ -19,7 +19,6 @@ import com.projects.FawrySystem.FawrySystemAPI.serviceProviders.IService;
 import com.projects.FawrySystem.FawrySystemAPI.transaction.ITransaction;
 
 public class ServicesCTRL {
-	ArrayList<IService> servicesFactory;
 	WeFactory weFactory=new WeFactory();
     VodafoneFactory vodafoneFactory=new VodafoneFactory();
     OrangeFactory orangeFactory=new OrangeFactory();
@@ -210,11 +209,6 @@ public class ServicesCTRL {
 	{	
 		chooseProviderFactory(providerName).addDropDownFlield(dropdownfield, values.size(), values);
 		return "Dropdown field < "+dropdownfield+" > has been added to " + providerName +"'s form";
-	}
-	
-	
-	public ArrayList<IService> getServicesFactory() {
-		return servicesFactory;
 	}
 	
 	//getters for the factories

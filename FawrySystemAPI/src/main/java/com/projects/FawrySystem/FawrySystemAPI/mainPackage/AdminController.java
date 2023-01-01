@@ -234,9 +234,9 @@ public class AdminController {
 		   admin.addUser(user);
 	}
 	
-	public String acceptTransaction(String transactionID,User user)
+	public String acceptTransaction(String transactionID)
 	{    
-		user =admin.getRefundRequests().get(transactionID);
+		User user =admin.getRefundRequests().get(transactionID);
 		if(user==null)
 		{
 			return "No refund Request made for this transaction";
@@ -258,9 +258,9 @@ public class AdminController {
 				refundRequestStrategy.refund(acceptedTransaction,user);
 
 	}
-	public String rejecttransaction(String transactionID,User user)
+	public String rejecttransaction(String transactionID)
 	{    
-		user =admin.getRefundRequests().get(transactionID);
+		User user =admin.getRefundRequests().get(transactionID);
 		if(user==null)
 		{
 			return "No refund Request made for this transaction";

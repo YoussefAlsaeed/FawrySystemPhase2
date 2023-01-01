@@ -16,7 +16,6 @@ import com.projects.FawrySystem.FawrySystemAPI.transaction.ITransaction;
 @RestController
 public class ApiCTRL {
 	 User currentUser ;
-	 User user;
 	 ArrayList <IService> services = new ArrayList<>();
 	 ArrayList <User> users=FawrySystemApiApplication.users;
      UserController userController;  
@@ -133,7 +132,6 @@ public class ApiCTRL {
 			if(transactions.size()==0)
 			{
 				responses.add("No Transactions Yet !");
-				System.out.println("here");
 			}
 			else
 			{
@@ -146,7 +144,7 @@ public class ApiCTRL {
 		return responses;
 	}
 	
-	@GetMapping(value="/user/refundRequest/{TransactionID}")
+	@PostMapping(value="admin/addToRefundRequests/{TransactionID}")
     public String refundRequest(@PathVariable ("TransactionID") String TransactionID )
     {
         if(!signedIn)
@@ -301,8 +299,6 @@ public class ApiCTRL {
 		 if(result==null)
 		 {
 			 serviceCTRL.setFormValues(serviceProviderObj,values);
-//			 Form form=serviceProviderObj.getForm();
-//			 form.setValues(values);
 			 ITransaction transaction=serviceProviderObj.pay(currentUser);
 			 if (transaction==null)
 			 {
@@ -328,13 +324,9 @@ public class ApiCTRL {
 		       return "The choice of this payment method already exists or is not supported by the system yet :( ";
 			
 		}
-	 @GetMapping(value = "/reviewRefundRequest/{chooseTransaction}/{acceptance}")
+	 @PutMapping(value = "user/creditcard/reviewRefundRequest/{chooseTransaction}/{acceptance}")
 	 public String reviewRefundRequest(@PathVariable ("chooseTransaction") String chooseTransaction,@PathVariable("acceptance") String acceptance)
 	 {
-     	//ITransaction Transaction=null;
-
-       user = new User();
-
 		 if (chooseTransaction.charAt(0)=='2')
      	{
 			 return "NO transacion";
@@ -350,9 +342,9 @@ public class ApiCTRL {
       		  adminController.setRefundRequest(new PaymentRefundRequest());
     		
     		 return
-    				 adminController.acceptTransaction(chooseTransaction,user);
+    				 adminController.acceptTransaction(chooseTransaction);
     	}
-    	return adminController.rejecttransaction(chooseTransaction,user);
+    	return adminController.rejecttransaction(chooseTransaction);
 	 }
 	 
 	 
