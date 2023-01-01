@@ -7,7 +7,7 @@ import com.projects.FawrySystem.FawrySystemAPI.composite.*;
 import com.projects.FawrySystem.FawrySystemAPI.serviceProviders.IService;
 
 public abstract class ProviderFactory {
-	protected Form form=new Form();
+	protected Form form;
 	protected MobileRechargeCommand mobileRechargeCommand= new MobileRechargeCommand();
 	protected InternetCommand internetCommand=new InternetCommand();
 	protected LandlineCommand landlineCommand=new LandlineCommand();
@@ -30,6 +30,7 @@ public abstract class ProviderFactory {
 		 *
 		 *admin can add more text fields and drop down fields for specific provider from admin menu
 		*/
+		form=new Form();
         createForm();
     }
 

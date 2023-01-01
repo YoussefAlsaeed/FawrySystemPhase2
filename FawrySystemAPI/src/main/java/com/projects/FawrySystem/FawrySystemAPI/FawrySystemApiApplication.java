@@ -496,7 +496,7 @@ public class FawrySystemApiApplication {
                     		else if(requestType.equals("1"))
                       		  adminController.setRefundRequest(new PaymentRefundRequest());
                     		
-                    		adminController.acceptTransaction(chooseTransaction,user);
+                    		adminController.acceptTransaction(chooseTransaction);
                     	}
                     	else
                     	{
