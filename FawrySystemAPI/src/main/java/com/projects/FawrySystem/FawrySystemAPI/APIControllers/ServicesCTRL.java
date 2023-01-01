@@ -60,9 +60,9 @@ public class ServicesCTRL {
 		 IService service;
 		 if(userChoice.contains("mobile")||userChoice.contains("internet")) // Choosing the service and service provider to pay for
          {
-         	if(userChoice.contains("mobile"))
+         	if(userChoice.toLowerCase().contains("mobile"))
          		userChoice="mobile";
-         	else if(userChoice.contains("internet"))
+         	else if(userChoice.toLowerCase().contains("internet"))
          		userChoice="internet";
          	 if(providerChoice.toLowerCase().contains("we"))
          		 service=weFactory.createServiceProvider(userChoice);
@@ -79,7 +79,7 @@ public class ServicesCTRL {
              }	 
         }
          
-         else if(userChoice.contains("donation"))
+         else if(userChoice.toLowerCase().contains("donation"))
          {
          	 if(providerChoice.toLowerCase().contains("school"))
          		 service=schoolFactory.createServiceProvider(userChoice);
@@ -92,10 +92,10 @@ public class ServicesCTRL {
         		    return null;
              }
          }
-         else if(userChoice.contains("landline"))
+         else if(userChoice.toLowerCase().contains("landline"))
          {
          	 
-         	 if(providerChoice.toLowerCase().contains("monthly"))
+         	 if(providerChoice.toLowerCase().contains("month"))
          		 service= monthlyReceiptFactory.createServiceProvider(userChoice);
           	else if(providerChoice.toLowerCase().contains("quarter"))
           		service=quarterReceiptFactory.createServiceProvider(userChoice);
@@ -127,8 +127,8 @@ public class ServicesCTRL {
             {
     			
             	 System.out.println((count+1) + " . "+ servicesList.get(i).getClass().getSimpleName()); 
-    			 resultList.add((count) + " . "+ servicesList.get(i).getClass().getSimpleName());
-                count++;
+    			 resultList.add((count+1) + " . "+ servicesList.get(i).getClass().getSimpleName());
+                 count++;
                 
                
             }

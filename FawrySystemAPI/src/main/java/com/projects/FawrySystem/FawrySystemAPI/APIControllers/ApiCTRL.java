@@ -30,33 +30,33 @@ public class ApiCTRL {
 		
         userController =UserController.getInstance();
         serviceCTRL=ServicesCTRL.getInstance();
-
 	        
 	}
-	 @GetMapping(value="/searchforService/{service}")
-	public ArrayList<String> search(@PathVariable ("service") String item)
+	
+	@GetMapping(value="user/searchforService/{servicename}")
+	public ArrayList<String> search(@PathVariable ("servicename") String item)
 	{
 		
 		 ArrayList<String> results;
 		 if(signedIn)
 		 {
-		   results=serviceCTRL.searchforService(item);
+		    results=serviceCTRL.searchforService(item);
 			if(results.size()>0)
 			{
-				
 				return results;
 			}
 			else results.add("Nothing matches your query :'( "); 
 			return results;
-		  }
-			else
-			 {
-				 results=new ArrayList<String>();
-				 results.add("An Error Occured Please, Login First");
-				 return results;
-			 }
+		 }
+		 else
+		 {
+			 results=new ArrayList<String>();
+			 results.add("An Error Occured Please, Login First");
+			 return results;
+		 }
 	}
-	@GetMapping(value="/user/check")
+	 
+	@GetMapping(value="/user/check/login")
     public String loginAPI(@RequestBody User user)
     { 	
 		boolean found=false;
@@ -100,9 +100,9 @@ public class ApiCTRL {
 		 }
 		else
 			return "An Error Occured, Please Login First";
-			
-			
+					
 	}
+	
 	@PutMapping(value="/discount/updatePercentage/{choice}/{discount}")
 	public  String addDiscount (@PathVariable ("choice") String choice,@PathVariable("discount") double discount)
    {
@@ -113,10 +113,7 @@ public class ApiCTRL {
 	@PutMapping(value="/discount/removeDiscount/{choice}")
 	public  String removeDiscount (@PathVariable ("choice") String choice)
    {
-	
-		return adminController.removeDiscount(choice, userController);
-			
-		
+		return adminController.removeDiscount(choice, userController);				
    }	
 	
 	@GetMapping(value = "/user/getTransactions")
@@ -148,7 +145,8 @@ public class ApiCTRL {
 		}
 		return responses;
 	}
-	@GetMapping(value="/refundRequest/{TransactionID}")
+	
+	@GetMapping(value="/user/refundRequest/{TransactionID}")
     public String refundRequest(@PathVariable ("TransactionID") String TransactionID )
     {
         if(!signedIn)
@@ -162,17 +160,17 @@ public class ApiCTRL {
 
         }
         else 
-        	return"No Transaction with this  ID" ;
+        	return " No Transaction with this  ID " ;
     }
 
-	 @PostMapping(value="/signup")
+	 @PostMapping(value="/user/check/signup")
 	 public String signup(@RequestBody User user)
 	 {
 		 try {
 			if(userController.signUp(user))
 			 {
 				 users.add(user);
-				 return "Welcome, "+user.getUsername()+" You are now part of our system\n You are now logged in as "+user.getUsername();
+				 return "Welcome, "+user.getUsername()+" You are now part of our system ";
 			 }
 			 else return "Username already exists, please try something else";
 		} catch (IOException e) {
@@ -241,6 +239,7 @@ public class ApiCTRL {
 	    return "You are logged out ! ";
 		 
 	 }
+	 
 	 @GetMapping(value = "/admin/transactions/getAll")
 		public ArrayList<String> listAllTransactions()
 		{
@@ -272,8 +271,16 @@ public class ApiCTRL {
 	 @GetMapping(value="/serviceProvider/getForm/{service}/{serviceProvider}")
 	 public String getForm(@PathVariable ("service") String service,@PathVariable ("serviceProvider") String serviceProvider)
 	 {
+		 String form;
 		 IService serviceProviderObj= serviceCTRL.createProvider(service,serviceProvider); //creates service provider using abstract factory
-		 String form= serviceCTRL.getForm(serviceProviderObj);//return the form as string
+		 if(serviceProviderObj == null)
+		 {
+			 form = "An error occureed ,please check the service ,service provider you entered";
+		 }
+		 else
+		 {
+			 form = serviceCTRL.getForm(serviceProviderObj);//return the form as string
+		 }	
 		 return form;
 	 }
 	 
