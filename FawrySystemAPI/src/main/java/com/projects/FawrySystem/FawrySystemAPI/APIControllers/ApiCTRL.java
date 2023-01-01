@@ -284,6 +284,10 @@ public class ApiCTRL {
 	        }
 		 
 		 IService serviceProviderObj= serviceCTRL.createProvider(service,serviceProvider); //creates service provider using abstract factory
+		 if(serviceProviderObj==null)
+		 {
+			 return "An error occureed ,please check the service ,service provider you entered";
+		 }
 		 String result=serviceCTRL.validate(serviceProviderObj,values);
 		 if(result==null)
 		 {

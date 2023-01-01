@@ -254,11 +254,13 @@ public class ServicesCTRL {
 		System.out.println(validPaymentMethods);
 		for(int i=0;i<validPaymentMethods.size();i++)
 		{
+			//checking if user input in the payment method field is correct
 			if(validPaymentMethods.get(i).toString().toLowerCase().contains(paymentMethod.toLowerCase()))
 			{
 				return null;
 			}
 		}
+		//if payment method not found
 		return "Payment method not found";
 		
 		
