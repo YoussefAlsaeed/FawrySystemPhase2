@@ -229,7 +229,7 @@ public class ApiCTRL {
 		 }
 		 
 	 }
-	 @GetMapping(value="/logout")
+	 @GetMapping(value="/user/logout")
 	 public String logOut()
 	 {
 	    signedIn=false;
@@ -327,7 +327,7 @@ public class ApiCTRL {
 	 @PutMapping(value = "user/creditcard/reviewRefundRequest/{chooseTransaction}/{acceptance}")
 	 public String reviewRefundRequest(@PathVariable ("chooseTransaction") String chooseTransaction,@PathVariable("acceptance") String acceptance)
 	 {
-		 if (chooseTransaction.charAt(0)=='2')
+		if (chooseTransaction.charAt(0)=='2')
      	{
 			 return "NO transacion";
      	}
@@ -360,21 +360,16 @@ public class ApiCTRL {
 
      }
 	 
-	 @PutMapping(value="/editForm/textfield/{providerName}/{textfield}")
+	 @PutMapping(value="/form/textfield/{providerName}/{textfield}")
 	 public String addTextFieldRequest(@PathVariable ("providerName") String providerName, @PathVariable ("textfield") String textfield)
 	 {
-//		 ProviderFactory provider;
-//		 provider = serviceCTRL.chooseProviderFactory(providerName);
 		 return serviceCTRL.addTextField(providerName,textfield);
 	 }
 	 
-	 @PutMapping(value="/editForm/dropdown/{providerName}/{dropdownfield}")
+	 @PutMapping(value="/form/dropdown/{providerName}/{dropdownfield}")
 	 public String addDropDownFieldRequest(@RequestBody ArrayList<Object> values,@PathVariable ("providerName") String providerName ,@PathVariable ("dropdownfield") String dropdownfield)
-		{		
-//			ProviderFactory provider;			
-//			provider = serviceCTRL.chooseProviderFactory(providerName);
-		 	
-			return serviceCTRL.addDropDownField(providerName,dropdownfield,values);
-		}	 
+	 {				 	
+		return serviceCTRL.addDropDownField(providerName,dropdownfield,values);
+	 }	 
 	 
 }
